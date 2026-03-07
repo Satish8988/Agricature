@@ -1,4 +1,4 @@
-# 🌾 agricature — Precision Agriculture Platform
+# 🌾 Agricature — Precision Agriculture Platform
 
 > A full-stack AI-powered farm management system built with Node.js, Express, MongoDB, and Claude AI.
 
