@@ -1,4 +1,4 @@
-# 🌾 AgriSmart 2026 — Precision Agriculture Platform
+# 🌾 agricature — Precision Agriculture Platform
 
 > A full-stack AI-powered farm management system built with Node.js, Express, MongoDB, and Claude AI.
 
