@@ -434,21 +434,9 @@ app.get('/api/health', (req, res) => {
 });
 
 
-// ── 5I. ROUTING — Login First, then Dashboard ────────────────
-
-// Root URL → always show login page first
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'login.html'));
-});
-
-// Dashboard — only reachable after login
-app.get('/dashboard', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// Any other unknown route → back to login
+// ── 5I. Catch-All — Serve Frontend ───────────────────────────
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 
