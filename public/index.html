@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>AgriSmart 2026 — Precision Agriculture Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ══════════════════════════════════════
+       TOPBAR
+  ══════════════════════════════════════ -->
+  <header class="topbar">
+    <a class="logo" href="#">
+      <div class="logo-mark">🌾</div>
+      <div class="logo-text">Agri<em>Smart</em>
+        <span style="font-family:var(--font-m);font-size:13px;color:var(--straw)">2026</span>
+      </div>
+    </a>
+    <div class="topbar-center">
+      <div class="weather-chip">
+        📍 <span id="farmer-location">Karnataka, IN</span> &nbsp;·&nbsp;
+        <span id="live-temp">—</span> &nbsp;·&nbsp;
+        <span id="live-hum">—</span> &nbsp;·&nbsp;
+        🌤 Partly Cloudy
+      </div>
+      <div class="live-pill"><div class="live-pulse"></div>LIVE</div>
+    </div>
+    <div class="topbar-right">
+      <!-- Language Selector -->
+      <div class="lang-selector">
+        <button class="lang-btn lang-active" data-lang="en"  onclick="switchLang('en')">EN</button>
+        <button class="lang-btn"             data-lang="hi"  onclick="switchLang('hi')">हि</button>
+        <button class="lang-btn"             data-lang="kn"  onclick="switchLang('kn')">ಕ</button>
+        <button class="lang-btn"             data-lang="te"  onclick="switchLang('te')">తె</button>
+        <button class="lang-btn"             data-lang="mr"  onclick="switchLang('mr')">म</button>
+      </div>
+      <div class="tb-btn" title="Offline Mode">📶</div>
+      <div class="tb-btn" onclick="nav('alerts',document.querySelector('[data-p=alerts]'))" title="Alerts">
+        <span>🔔</span><div class="badge-dot">4</div>
+      </div>
+      <div class="user-chip">
+        <div class="user-avatar">👨‍🌾</div>
+        <span class="user-name" id="user-name">Loading…</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════
+       SIDEBAR
+  ══════════════════════════════════════ -->
+  <aside class="sidebar">
+    <div class="side-head" id="side-head-ops">Operations</div>
+    <div class="nav-item active" data-p="overview" onclick="nav('overview',this)"><span class="nav-ico">🗺</span><span class="nav-label" id="nav-overview">Overview</span></div>
+    <div class="nav-item" data-p="fields"   onclick="nav('fields',this)">  <span class="nav-ico">🌱</span><span class="nav-label" id="nav-fields">My Fields</span></div>
+    <div class="nav-item" data-p="sensors"  onclick="nav('sensors',this)"> <span class="nav-ico">📡</span><span class="nav-label" id="nav-sensors">IoT Sensors</span></div>
+
+    <div class="side-head" id="side-head-ai">AI Tools</div>
+    <div class="nav-item" data-p="yield"    onclick="nav('yield',this)">   <span class="nav-ico">📈</span><span class="nav-label" id="nav-yield">Yield Predictor</span></div>
+    <div class="nav-item" data-p="pest"     onclick="nav('pest',this)">    <span class="nav-ico">🔬</span><span class="nav-label" id="nav-pest">Pest Detector</span><span class="nav-badge">1</span></div>
+    <div class="nav-item" data-p="sowing"   onclick="nav('sowing',this)">  <span class="nav-ico">🌦</span><span class="nav-label" id="nav-sowing">Sowing Advisor</span></div>
+    <div class="nav-item" data-p="prx"      onclick="nav('prx',this)">     <span class="nav-ico">🗂</span><span class="nav-label" id="nav-prx">Prescription Map</span></div>
+
+    <div class="side-head" id="side-head-intel">Intelligence</div>
+    <div class="nav-item" data-p="advisor"  onclick="nav('advisor',this)"> <span class="nav-ico">🤖</span><span class="nav-label" id="nav-advisor">AI Agronomist</span></div>
+    <div class="nav-item" data-p="alerts"   onclick="nav('alerts',this)">  <span class="nav-ico">🚨</span><span class="nav-label" id="nav-alerts">Alerts</span><span class="nav-badge">4</span></div>
+
+    <div class="sidebar-footer">
+      <div class="sync-status"><div class="sync-dot"></div>Last sync: 2 min ago · MQTT active</div>
+      <div class="offline-toggle"><div class="toggle"></div>Offline cache: Enabled</div>
+    </div>
+  </aside>
+
+  <!-- ══════════════════════════════════════
+       MAIN
+  ══════════════════════════════════════ -->
+  <main class="main">
+
+    <!-- OVERVIEW -->
+    <div class="page active" id="p-overview">
+      <div class="page-hdr">
+        <div class="page-hdr-left">
+          <h1>Field Overview</h1>
+          <p id="today-date"></p>
+          <p id="farmer-greet" style="font-family:var(--font-m);font-size:12px;color:var(--fern);margin-top:4px"></p>
+        </div>
+        <div class="page-hdr-right">
+          <div class="chip chip-green">● 4 fields monitored</div>
+          <div class="chip chip-outline">Sentinel-2 · 3h ago</div>
+        </div>
+      </div>
+      <div class="g4" style="margin-bottom:20px">
+        <div class="card kpi-card"><div class="kpi-icon">🌾</div><div class="kpi-label" id="kpi-area">Total Area</div><div class="kpi-value">118<span> ha</span></div><div class="kpi-trend t-up">↑ 4 active parcels</div></div>
+        <div class="card kpi-card"><div class="kpi-icon">💚</div><div class="kpi-label" id="kpi-health">Avg Field Health</div><div class="kpi-value" id="kv-h">—</div><div class="kpi-bar"><div class="kpi-fill" id="kf-h" style="background:var(--fern)"></div></div></div>
+        <div class="card kpi-card"><div class="kpi-icon">🛰</div><div class="kpi-label" id="kpi-ndvi">Avg NDVI Index</div><div class="kpi-value" id="kv-n">—</div><div class="kpi-trend t-up">↑ Healthy vegetation</div></div>
+        <div class="card kpi-card"><div class="kpi-icon">⚠️</div><div class="kpi-label" id="kpi-alerts">Active Alerts</div><div class="kpi-value" style="color:var(--rust)">4</div><div class="kpi-trend t-dn">↑ 1 high priority</div></div>
+      </div>
+      <div class="gm">
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <div class="card">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+              <div class="card-title" style="margin:0">Satellite NDVI Map</div>
+              <div class="chip chip-outline">OpenWeather + Sentinel-2</div>
+            </div>
+            <div class="map-wrap" id="field-map"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Field Summary</div>
+            <table class="tbl"><thead><tr><th>Field</th><th>Area</th><th>Health</th><th>NDVI</th><th>Risk</th></tr></thead><tbody id="ftbody"></tbody></table>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="card" id="detail-panel"></div>
+          <div class="card"><div class="card-title">Recent Alerts</div><div id="alerts-mini" style="display:flex;flex-direction:column;gap:8px"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FIELDS -->
+    <div class="page" id="p-fields">
+      <div class="page-hdr"><div class="page-hdr-left"><h1 id="nav-fields-title">My Fields</h1><p id="fields-sub">Tap a field to view detailed sensor data and AI recommendations.</p></div></div>
+      <div class="g2" id="field-cards"></div>
+    </div>
+
+    <!-- SENSORS -->
+    <div class="page" id="p-sensors">
+      <div class="page-hdr"><div class="page-hdr-left"><h1>IoT Sensor Network</h1><p>Live telemetry from MQTT-connected field devices.</p></div></div>
+      <div class="g2" style="align-items:start">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="card"><div class="card-title">Live Sensor Readings</div><div id="sensor-live" style="display:flex;flex-direction:column;gap:8px"></div></div>
+          <div class="card-dark">
+            <div style="font-family:var(--font-m);font-size:11px;color:var(--straw);margin-bottom:10px;letter-spacing:.06em;text-transform:uppercase">MQTT Broker Status</div>
+            <div style="font-family:var(--font-m);font-size:12px;color:rgba(255,255,255,.7);line-height:2">
+              <span style="color:rgba(255,255,255,.4)">broker://</span>mqtt.agrismart.io:8883<br>
+              <span style="color:rgba(255,255,255,.4)">topic:</span> fields/+/sensors/#<br>
+              <span style="color:rgba(255,255,255,.4)">status:</span> <span style="color:var(--lime)">● CONNECTED</span><br>
+              <span style="color:rgba(255,255,255,.4)">devices:</span> 12 online / 14 total<br>
+              <span style="color:rgba(255,255,255,.4)">latency:</span> 42 ms
+            </div>
+          </div>
+        </div>
+        <div class="card"><div class="card-title">Recommended Hardware</div><div id="hw-list" style="display:flex;flex-direction:column;gap:10px"></div></div>
+      </div>
+    </div>
+
+    <!-- YIELD -->
+    <div class="page" id="p-yield">
+      <div class="page-hdr"><div class="page-hdr-left"><h1>Yield Predictor</h1><p>Random Forest model — 5-year historical NPK, rainfall & temperature data.</p></div></div>
+      <div class="gm" style="align-items:start">
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <div class="card">
+            <div class="card-title">Weekly Forecast vs Actual <span style="font-family:var(--font-m);font-size:11px;color:var(--faint);font-style:italic">(tonnes/ha)</span></div>
+            <div class="chart-wrap">
+              <svg id="yield-svg" width="100%" height="170" viewBox="0 0 560 170" preserveAspectRatio="none" style="display:block"></svg>
+              <div style="display:flex;gap:16px;margin-top:8px">
+                <div style="display:flex;align-items:center;gap:6px;font-family:var(--font-m);font-size:11px;color:var(--faint)"><div style="width:20px;height:2.5px;background:var(--fern);border-radius:99px"></div>Actual</div>
+                <div style="display:flex;align-items:center;gap:6px;font-family:var(--font-m);font-size:11px;color:var(--faint)"><div style="width:20px;height:2px;background:repeating-linear-gradient(90deg,var(--sky) 0,var(--sky) 5px,transparent 5px,transparent 9px)"></div>AI Prediction</div>
+              </div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Run Prediction Model</div>
+            <div class="g3" style="gap:10px;margin-bottom:14px" id="y-inputs"></div>
+            <button class="btn btn-primary btn-full" onclick="runYield()">⚡ Run Random Forest Model</button>
+            <div id="yield-result" style="display:none;margin-top:14px"></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="card">
+            <div class="card-title">Model Details</div>
+            <div class="card-inset" style="margin-bottom:12px">
+              <div style="font-family:var(--font-m);font-size:12px;color:var(--moss);font-weight:600;margin-bottom:6px">Random Forest Regressor</div>
+              <div style="font-family:var(--font-m);font-size:11px;color:var(--dim);line-height:2">Estimators: 500<br>Features: NPK, pH, Moisture, Temp, NDVI<br>R² Score: <span style="color:var(--fern);font-weight:600">0.913</span><br>RMSE: 0.28 t/ha<br>Training set: 12,400 records</div>
+            </div>
+            <div class="card-title-sm">Feature Importance</div>
+            <div id="feat-imp"></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Python / FastAPI Snippet</div>
+            <div class="code-block"><span class="c-cmt"># Yield Prediction Endpoint</span>
+<span class="c-key">from</span> fastapi <span class="c-key">import</span> FastAPI
+<span class="c-key">import</span> joblib, numpy <span class="c-key">as</span> np
+
+app = FastAPI()
+model = joblib.<span class="c-fn">load</span>(<span class="c-str">"rf_yield.pkl"</span>)
+
+@app.<span class="c-fn">post</span>(<span class="c-str">"/predict/yield"</span>)
+<span class="c-key">async def</span> <span class="c-fn">predict</span>(data: dict):
+    X = np.<span class="c-fn">array</span>([[data[<span class="c-str">"N"</span>], data[<span class="c-str">"P"</span>], data[<span class="c-str">"K"</span>],
+        data[<span class="c-str">"pH"</span>], data[<span class="c-str">"moisture"</span>], data[<span class="c-str">"temp"</span>]]])
+    <span class="c-key">return</span> {<span class="c-str">"yield_t_ha"</span>: model.<span class="c-fn">predict</span>(X)[0]}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PEST -->
+    <div class="page" id="p-pest">
+      <div class="page-hdr"><div class="page-hdr-left"><h1>Pest Detector</h1><p>EfficientNet-B4 CNN — identify disease or pest from a field photo in &lt;2 seconds.</p></div></div>
+      <div class="g2" style="align-items:start">
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="card">
+            <div class="card-title">Upload Field Photo</div>
+            <div class="pest-upload" onclick="runPest()">
+              <div style="font-size:40px;margin-bottom:12px">📷</div>
+              <div style="font-weight:600;font-size:15px;color:var(--earth)">Click to simulate CNN scan</div>
+              <div style="font-family:var(--font-m);font-size:11px;color:var(--faint);margin-top:5px">JPG / PNG · Max 8MB · Inference &lt;2s</div>
+            </div>
+            <div id="pest-loading" style="display:none;text-align:center;padding:20px">
+              <div class="thinking"><span></span><span></span><span></span></div>
+              <div style="font-family:var(--font-m);font-size:12px;color:var(--faint)">Running CNN inference…</div>
+            </div>
+            <div id="pest-res" style="display:none;margin-top:14px"></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div class="card"><div class="card-title">Detection History</div><div id="pest-hist" style="display:flex;flex-direction:column;gap:9px"></div></div>
+          <div class="card-inset">
+            <div style="font-family:var(--font-m);font-size:11px;color:var(--moss);font-weight:600;margin-bottom:5px">EfficientNet-B4 · PyTorch</div>
+            <div style="font-family:var(--font-m);font-size:11px;color:var(--dim);line-height:1.9">Classes: 38 diseases + 12 pest types<br>Validation accuracy: 94.2%<br>CPU inference: ~1.8 seconds<br>Training: PlantVillage + custom dataset</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOWING -->
+    <div class="page" id="p-sowing">
+      <div class="page-hdr"><div class="page-hdr-left"><h1>Sowing Advisor</h1><p>Degree-day calculations + OpenWeather forecasting for optimal planting windows.</p></div></div>
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div class="g4" id="sow-cards"></div>
+        <div class="g2" style="align-items:start">
+          <div class="card"><div class="card-title">Current Conditions</div><div class="g2" style="gap:9px" id="sow-cond"></div></div>
+          <div class="card">
+            <div class="card-title">10-Day Temperature Forecast</div>
+            <svg id="fc-svg" width="100%" height="120" viewBox="0 0 400 120" style="display:block"></svg>
+            <div style="display:flex;gap:14px;margin-top:6px">
+              <div style="display:flex;align-items:center;gap:6px;font-family:var(--font-m);font-size:10px;color:var(--faint)"><div style="width:16px;height:2px;background:var(--amber)"></div>Max°C</div>
+              <div style="display:flex;align-items:center;gap:6px;font-family:var(--font-m);font-size:10px;color:var(--faint)"><div style="width:16px;height:2px;background:var(--sky)"></div>Min°C</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRESCRIPTION -->
+    <div class="page" id="p-prx">
+      <div class="page-hdr"><div class="page-hdr-left"><h1>Prescription Maps</h1><p>Variable-rate fertilizer application — AI calculates exact dose per grid zone.</p></div></div>
+      <div class="gm" style="align-items:start">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
+            <div class="card-title" style="margin:0">Nitrogen — North Paddock (42 ha)</div>
+            <div class="chip chip-outline">8×8 grid</div>
+          </div>
+          <div class="prx-grid" id="prx-grid"></div>
+          <div class="prx-legend" id="prx-leg"></div>
+          <div class="prx-labs"><span>Low 30 kg/ha</span><span>High 140 kg/ha</span></div>
+          <div id="prx-tip" style="display:none;margin-top:12px" class="card-inset"></div>
+          <hr class="divider"/>
+          <button class="btn btn-primary btn-full" onclick="exportPrx()">📥 Export to Tractor Controller (.csv)</button>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="card"><div class="card-title">Application Summary</div><div id="prx-sum" style="font-family:var(--font-m);font-size:12px;color:var(--dim);line-height:2.2"></div></div>
+          <div class="card">
+            <div class="card-title">Select Nutrient</div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <button class="btn btn-primary btn-full" onclick="switchN('N')" id="nN">🟢 Nitrogen (N)</button>
+              <button class="btn btn-secondary btn-full" onclick="switchN('P')" id="nP">🔵 Phosphorus (P)</button>
+              <button class="btn btn-secondary btn-full" onclick="switchN('K')" id="nK">🟠 Potassium (K)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI ADVISOR -->
+    <div class="page" id="p-advisor">
+      <div class="page-hdr"><div class="page-hdr-left"><h1>AI Agronomist</h1><p>Ask anything about your fields — powered by Claude AI with real agronomic intelligence.</p></div></div>
+      <div class="gm" style="align-items:start">
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="card">
+            <div class="card-title">Ask Your Agronomist</div>
+            <div class="qbtns" id="qbtns"></div>
+            <div class="ai-wrap">
+              <input class="inp" id="ai-inp" placeholder="e.g. When should I irrigate West Lot?" onkeydown="if(event.key==='Enter')doAsk()"/>
+              <button class="btn btn-primary" id="ai-btn" onclick="doAsk()">⚡ Ask</button>
+            </div>
+            <div class="ai-response" id="ai-box"><em style="color:var(--faint)">Your AI agronomist is ready. Ask a question about crops, soil, or irrigation.</em></div>
+            <div class="ai-credit">Powered by Claude AI · AgriSmart 2026</div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="card"><div class="card-title">Field Context Loaded</div><div id="ctx" style="font-family:var(--font-m);font-size:11px;color:var(--dim);line-height:2.1"></div></div>
+          <div class="card"><div class="card-title">Connected APIs</div><div id="api-list" style="display:flex;flex-direction:column;gap:7px"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ALERTS -->
+    <div class="page" id="p-alerts">
+      <div class="page-hdr"><div class="page-hdr-left"><h1>Alerts &amp; Notifications</h1><p>AI-generated agronomic alerts via SMS (Twilio) and in-app notifications.</p></div></div>
+      <div class="gm" style="align-items:start">
+        <div id="alerts-full" style="display:flex;flex-direction:column;gap:12px"></div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="card">
+            <div class="card-title">SMS Gateway</div>
+            <div class="card-inset" style="font-family:var(--font-m);font-size:12px;color:var(--dim);line-height:2;margin-bottom:12px">Provider: <span style="color:var(--moss);font-weight:600">Twilio</span><br>Sent today: 7 messages<br>Subscribers: 3 farmers<br>Status: <span style="color:var(--fern)">● Active</span></div>
+            <button class="btn btn-primary btn-full" onclick="testSMS()">📱 Send Test SMS</button>
+          </div>
+          <div class="card"><div class="card-title">Alert Rules</div><div id="a-rules" style="font-family:var(--font-m);font-size:11px;color:var(--dim);line-height:2.4"></div></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- SMS MODAL -->
+<div class="modal-overlay" id="modal" onclick="closeModal(event)">
+  <div class="modal-box">
+    <div class="modal-title">📱 SMS Alert Preview</div>
+    <div class="modal-sub">Twilio API · Sending to registered farmers</div>
+    <div class="sms-preview" id="modal-sms"></div>
+    <button class="btn btn-secondary btn-full" onclick="document.getElementById('modal').classList.remove('open')">Close</button>
+  </div>
+</div>
+
+<!-- Scripts — order matters -->
+<script src="data.js"></script>
+<script src="app.js"></script>
+<script src="renderers.js"></script>
+<script src="actions.js"></script>
+
+</body>
+</html>
