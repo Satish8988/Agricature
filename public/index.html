@@ -9,6 +9,15 @@
 </head>
 <body>
 
+<script>
+  // ── Session Guard ─────────────────────────────────────────
+  // If farmer has not logged in, send them back to login page
+  const farmer = sessionStorage.getItem('agri_farmer');
+  if (!farmer) {
+    window.location.href = '/';
+  }
+</script>
+
 <div class="app">
 
   <!-- ══════════════════════════════════════

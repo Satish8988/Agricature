@@ -172,15 +172,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   }, 2400);
 });
 
-// ─── Load Farmer from Backend ────────────────────────────────
+// ─── Load Farmer from Session ────────────────────────────────
 async function loadFarmer() {
   try {
-    const res  = await fetch('/api/farmers?limit=1');
-    const data = await res.json();
-
-    // Get the most recently registered farmer
-    if (data.success && data.data && data.data.length > 0) {
-      farmerData = data.data[0];
+    // Read farmer saved during login registration
+    const stored = sessionStorage.getItem('agri_farmer');
+    if (stored) {
+      farmerData = JSON.parse(stored);
 
       // Update farmer name in topbar
       const nameEl = document.getElementById('user-name');
@@ -190,12 +188,14 @@ async function loadFarmer() {
       const locEl = document.getElementById('farmer-location');
       if (locEl) {
         const loc = farmerData.satellite_place || farmerData.location || 'Karnataka, IN';
-        // Shorten to first 2 parts (e.g. "Dharwad, Karnataka")
         locEl.textContent = loc.split(',').slice(0, 2).join(',').trim();
       }
+    } else {
+      // No session — go back to login
+      window.location.href = '/';
     }
   } catch (err) {
-    console.log('Could not load farmer data:', err.message);
+    console.log('Could not load farmer session:', err.message);
   }
 }
 
