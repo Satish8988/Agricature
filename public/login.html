@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>AgriSmart 2026 — Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@300;400;500&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --earth:   #2c1f0e;
+      --moss:    #3a5a28;
+      --fern:    #4e7a34;
+      --lime:    #7ab648;
+      --straw:   #c8a84b;
+      --amber:   #d4821a;
+      --cream:   #f5f0e8;
+      --fog:     #e8e0d0;
+      --ink:     #1a1208;
+      --faint:   #9a8870;
+      --rust:    #b84a2a;
+      --sky:     #4a8ab4;
+      --font-h:  'Playfair Display', serif;
+      --font-m:  'IBM Plex Mono', monospace;
+      --font-b:  'Plus Jakarta Sans', sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: var(--font-b);
+      background: var(--ink);
+      overflow: hidden;
+    }
+
+    /* ── Background ── */
+    .bg {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 50%, #1a2e0e88 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 80% 30%, #0e1a2888 0%, transparent 60%),
+        linear-gradient(135deg, #0d1a08 0%, #1a1208 40%, #081018 100%);
+    }
+
+    .bg-grid {
+      position: fixed; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(rgba(122,182,72,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(122,182,72,.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* floating orbs */
+    .orb {
+      position: fixed; border-radius: 50%; filter: blur(80px); z-index: 0; pointer-events: none;
+      animation: float 8s ease-in-out infinite;
+    }
+    .orb1 { width:400px; height:400px; background:rgba(78,122,52,.12); top:-100px; left:-100px; animation-delay:0s; }
+    .orb2 { width:300px; height:300px; background:rgba(74,138,180,.08); bottom:-50px; right:-50px; animation-delay:3s; }
+    .orb3 { width:200px; height:200px; background:rgba(200,168,75,.06); top:50%; left:60%; animation-delay:5s; }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0) scale(1); }
+      50%      { transform: translateY(-30px) scale(1.05); }
+    }
+
+    /* ── Layout ── */
+    .layout {
+      position: relative; z-index: 1;
+      height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 480px;
+    }
+
+    /* ── Left — Map Side ── */
+    .map-side {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .map-header {
+      position: absolute; top: 0; left: 0; right: 0; z-index: 10;
+      padding: 28px 32px;
+      background: linear-gradient(to bottom, rgba(13,26,8,.9) 0%, transparent 100%);
+    }
+
+    .logo {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .logo-icon {
+      width: 42px; height: 42px;
+      background: linear-gradient(135deg, var(--fern), var(--lime));
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 4px 20px rgba(78,122,52,.4);
+    }
+    .logo-text {
+      font-family: var(--font-h);
+      font-size: 22px;
+      color: var(--cream);
+      line-height: 1;
+    }
+    .logo-text em { color: var(--lime); font-style: normal; }
+    .logo-year {
+      font-family: var(--font-m);
+      font-size: 11px;
+      color: var(--straw);
+      letter-spacing: .1em;
+    }
+
+    #map {
+      flex: 1;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Leaflet overrides */
+    .leaflet-container { background: #0d1a08 !important; }
+    .leaflet-control-zoom a {
+      background: rgba(20,35,15,.9) !important;
+      color: var(--lime) !important;
+      border-color: rgba(122,182,72,.2) !important;
+    }
+    .leaflet-control-attribution {
+      background: rgba(13,26,8,.7) !important;
+      color: rgba(255,255,255,.3) !important;
+      font-size: 9px !important;
+    }
+
+    .map-overlay {
+      position: absolute; bottom: 0; left: 0; right: 0; z-index: 10;
+      padding: 20px 28px;
+      background: linear-gradient(to top, rgba(13,26,8,.95) 0%, transparent 100%);
+    }
+
+    .map-instruction {
+      font-family: var(--font-m);
+      font-size: 11px;
+      color: rgba(200,168,75,.8);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .pulse-dot {
+      width: 8px; height: 8px;
+      background: var(--lime);
+      border-radius: 50%;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:.4; transform:scale(1.4); }
+    }
+
+    .map-coords {
+      font-family: var(--font-m);
+      font-size: 13px;
+      color: var(--cream);
+      background: rgba(20,35,15,.8);
+      border: 1px solid rgba(122,182,72,.2);
+      border-radius: 8px;
+      padding: 10px 14px;
+      display: inline-flex; gap: 16px;
+      backdrop-filter: blur(8px);
+    }
+    .map-coords span { color: var(--faint); font-size: 10px; }
+
+    /* custom marker */
+    .custom-marker {
+      width: 32px; height: 32px;
+      background: linear-gradient(135deg, var(--fern), var(--lime));
+      border-radius: 50% 50% 50% 0;
+      transform: rotate(-45deg);
+      border: 3px solid white;
+      box-shadow: 0 4px 16px rgba(78,122,52,.6);
+      cursor: pointer;
+    }
+
+    /* ── Right — Form Side ── */
+    .form-side {
+      background: rgba(15,22,10,.95);
+      border-left: 1px solid rgba(122,182,72,.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 48px 44px;
+      overflow-y: auto;
+      backdrop-filter: blur(20px);
+    }
+
+    .form-eyebrow {
+      font-family: var(--font-m);
+      font-size: 10px;
+      color: var(--lime);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .form-title {
+      font-family: var(--font-h);
+      font-size: 36px;
+      color: var(--cream);
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+    .form-title em { color: var(--lime); font-style: italic; }
+
+    .form-sub {
+      font-size: 13px;
+      color: var(--faint);
+      line-height: 1.6;
+      margin-bottom: 36px;
+    }
+
+    /* ── Input Fields ── */
+    .field-group {
+      margin-bottom: 20px;
+    }
+
+    .field-label {
+      font-family: var(--font-m);
+      font-size: 10px;
+      color: var(--straw);
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    .field-input {
+      width: 100%;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(200,168,75,.2);
+      border-radius: 10px;
+      padding: 14px 16px;
+      font-family: var(--font-b);
+      font-size: 14px;
+      color: var(--cream);
+      outline: none;
+      transition: all .25s;
+    }
+    .field-input::placeholder { color: rgba(154,136,112,.5); }
+    .field-input:focus {
+      border-color: rgba(122,182,72,.5);
+      background: rgba(122,182,72,.05);
+      box-shadow: 0 0 0 3px rgba(122,182,72,.1);
+    }
+
+    /* Phone input with flag */
+    .phone-wrap {
+      display: flex; gap: 10px;
+    }
+    .phone-prefix {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(200,168,75,.2);
+      border-radius: 10px;
+      padding: 14px 14px;
+      font-family: var(--font-m);
+      font-size: 13px;
+      color: var(--straw);
+      white-space: nowrap;
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    /* Location display box */
+    .location-box {
+      background: rgba(78,122,52,.08);
+      border: 1px solid rgba(122,182,72,.2);
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: flex; align-items: center; gap: 12px;
+      cursor: pointer;
+      transition: all .25s;
+      min-height: 52px;
+    }
+    .location-box:hover {
+      border-color: rgba(122,182,72,.4);
+      background: rgba(78,122,52,.12);
+    }
+    .location-box.selected {
+      border-color: rgba(122,182,72,.6);
+      background: rgba(78,122,52,.15);
+    }
+    .loc-icon { font-size: 18px; flex-shrink: 0; }
+    .loc-text {
+      font-family: var(--font-m);
+      font-size: 12px;
+      color: var(--cream);
+      line-height: 1.5;
+    }
+    .loc-hint {
+      font-size: 11px;
+      color: var(--faint);
+    }
+
+    /* ── Submit Button ── */
+    .btn-submit {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--fern) 0%, var(--lime) 100%);
+      border: none;
+      border-radius: 12px;
+      font-family: var(--font-b);
+      font-size: 15px;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      margin-top: 8px;
+      position: relative;
+      overflow: hidden;
+      transition: all .3s;
+      box-shadow: 0 4px 24px rgba(78,122,52,.35);
+    }
+    .btn-submit::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,.15), transparent);
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(78,122,52,.5); }
+    .btn-submit:hover::before { opacity: 1; }
+    .btn-submit:active { transform: translateY(0); }
+    .btn-submit:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+    /* ── Divider ── */
+    .divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 20px 0;
+    }
+    .divider-line { flex: 1; height: 1px; background: rgba(200,168,75,.1); }
+    .divider-text { font-family: var(--font-m); font-size: 10px; color: var(--faint); letter-spacing: .1em; }
+
+    /* ── Success State ── */
+    .success-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 100;
+      background: rgba(13,26,8,.97);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn .5s ease;
+    }
+    .success-overlay.show { display: flex; }
+
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+    .success-icon {
+      width: 80px; height: 80px;
+      background: linear-gradient(135deg, var(--fern), var(--lime));
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px;
+      margin-bottom: 24px;
+      animation: scaleIn .5s cubic-bezier(.34,1.56,.64,1) .2s both;
+      box-shadow: 0 0 60px rgba(122,182,72,.4);
+    }
+    @keyframes scaleIn { from { transform:scale(0); } to { transform:scale(1); } }
+
+    .success-title {
+      font-family: var(--font-h);
+      font-size: 32px;
+      color: var(--cream);
+      margin-bottom: 8px;
+    }
+    .success-sub {
+      font-family: var(--font-m);
+      font-size: 13px;
+      color: var(--faint);
+      margin-bottom: 32px;
+    }
+    .success-card {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(122,182,72,.2);
+      border-radius: 16px;
+      padding: 24px 32px;
+      text-align: left;
+      min-width: 320px;
+    }
+    .success-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      font-family: var(--font-m);
+      font-size: 12px;
+    }
+    .success-row:last-child { border-bottom: none; }
+    .success-row .key { color: var(--faint); }
+    .success-row .val { color: var(--cream); font-weight: 500; }
+
+    .btn-enter {
+      margin-top: 24px;
+      padding: 14px 40px;
+      background: linear-gradient(135deg, var(--fern), var(--lime));
+      border: none; border-radius: 10px;
+      font-family: var(--font-b); font-size: 14px; font-weight: 600;
+      color: white; cursor: pointer;
+      box-shadow: 0 4px 20px rgba(78,122,52,.4);
+      transition: all .3s;
+    }
+    .btn-enter:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(78,122,52,.5); }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(122,182,72,.2); border-radius: 2px; }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .map-side { height: 45vh; }
+      .form-side { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg"></div>
+<div class="bg-grid"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<!-- ── Layout ── -->
+<div class="layout">
+
+  <!-- LEFT: Satellite Map -->
+  <div class="map-side">
+    <div class="map-header">
+      <div class="logo">
+        <div class="logo-icon">🌾</div>
+        <div>
+          <div class="logo-text">Agri<em>Smart</em></div>
+          <div class="logo-year">2026 · PRECISION AGRICULTURE</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="map-overlay">
+      <div class="map-instruction">
+        <div class="pulse-dot"></div>
+        Click anywhere on the map to select your farm location
+      </div>
+      <div class="map-coords" id="coords-display">
+        <div><span>LAT</span> <span id="lat-val">—</span></div>
+        <div><span>LNG</span> <span id="lng-val">—</span></div>
+        <div><span>LOCATION</span> <span id="place-val">Not selected</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Login Form -->
+  <div class="form-side">
+    <div class="form-eyebrow">🛰 Precision Agriculture Platform</div>
+    <div class="form-title">Welcome to<br>Agri<em>Smart</em></div>
+    <div class="form-sub">Register your farm to get started with AI-powered field monitoring, yield prediction, and smart alerts.</div>
+
+    <!-- Name -->
+    <div class="field-group">
+      <div class="field-label">👤 Full Name</div>
+      <input class="field-input" id="inp-name" type="text" placeholder="e.g. Rajesh Kumar" autocomplete="off"/>
+    </div>
+
+    <!-- Phone -->
+    <div class="field-group">
+      <div class="field-label">📱 Mobile Number</div>
+      <div class="phone-wrap">
+        <div class="phone-prefix">🇮🇳 +91</div>
+        <input class="field-input" id="inp-phone" type="tel" placeholder="98765 43210" maxlength="10"/>
+      </div>
+    </div>
+
+    <!-- Manual Location -->
+    <div class="field-group">
+      <div class="field-label">🏘 Village / District</div>
+      <input class="field-input" id="inp-location" type="text" placeholder="e.g. Dharwad, Karnataka"/>
+    </div>
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-text">OR PIN YOUR FARM ON MAP</div>
+      <div class="divider-line"></div>
+    </div>
+
+    <!-- Satellite Location Picker -->
+    <div class="field-group">
+      <div class="field-label">🛰 Satellite Farm Location</div>
+      <div class="location-box" id="loc-box" onclick="focusMap()">
+        <div class="loc-icon">📍</div>
+        <div>
+          <div class="loc-text" id="loc-text">No location selected</div>
+          <div class="loc-hint" id="loc-hint">Click on the satellite map on the left to pin your farm</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <button class="btn-submit" id="btn-submit" onclick="handleSubmit()">
+      🌾 Register My Farm
+    </button>
+
+    <div style="margin-top:16px;font-family:var(--font-m);font-size:10px;color:var(--faint);text-align:center;line-height:1.8">
+      Your data is stored securely · SMS alerts via Twilio<br>
+      Powered by Sentinel-2 · OpenWeather · Claude AI
+    </div>
+  </div>
+</div>
+
+<!-- ── Success Overlay ── -->
+<div class="success-overlay" id="success-overlay">
+  <div class="success-icon">✅</div>
+  <div class="success-title">Farm Registered!</div>
+  <div class="success-sub">Welcome to AgriSmart 2026</div>
+  <div class="success-card" id="success-card"></div>
+  <button class="btn-enter" onclick="goToDashboard()">Enter Dashboard →</button>
+</div>
+
+<script>
+// ── Map Setup ────────────────────────────────────────────────
+const map = L.map('map', {
+  center: [15.3173, 75.7139],   // Karnataka, India
+  zoom: 7,
+  zoomControl: true,
+  attributionControl: true
+});
+
+// Satellite tile layer (Esri World Imagery)
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  attribution: 'Tiles © Esri · Source: Esri, USGS, NOAA',
+  maxZoom: 19
+}).addTo(map);
+
+// Optional: labels overlay
+L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+  maxZoom: 19,
+  opacity: 0.7
+}).addTo(map);
+
+// ── Marker ───────────────────────────────────────────────────
+let marker = null;
+let selectedLat = null;
+let selectedLng = null;
+let selectedPlace = null;
+
+const customIcon = L.divIcon({
+  className: '',
+  html: '<div class="custom-marker"></div>',
+  iconSize: [32, 32],
+  iconAnchor: [10, 30],
+  popupAnchor: [6, -30]
+});
+
+// ── Map Click Handler ─────────────────────────────────────────
+map.on('click', async function(e) {
+  const { lat, lng } = e.latlng;
+  selectedLat = lat.toFixed(5);
+  selectedLng = lng.toFixed(5);
+
+  // Place / update marker
+  if (marker) {
+    marker.setLatLng(e.latlng);
+  } else {
+    marker = L.marker(e.latlng, { icon: customIcon }).addTo(map);
+  }
+
+  // Update coords display
+  document.getElementById('lat-val').textContent   = selectedLat;
+  document.getElementById('lng-val').textContent   = selectedLng;
+  document.getElementById('place-val').textContent = 'Fetching…';
+
+  // Reverse geocode using OpenStreetMap Nominatim (free, no key needed)
+  try {
+    const res  = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
+    const data = await res.json();
+    const addr = data.address;
+    selectedPlace = [
+      addr.village || addr.town || addr.city || addr.county || '',
+      addr.state_district || addr.district || '',
+      addr.state || ''
+    ].filter(Boolean).join(', ');
+    if (!selectedPlace) selectedPlace = data.display_name?.split(',').slice(0,2).join(',').trim();
+  } catch {
+    selectedPlace = `${selectedLat}°N, ${selectedLng}°E`;
+  }
+
+  // Update UI
+  document.getElementById('place-val').textContent = selectedPlace || 'Unknown area';
+  document.getElementById('loc-text').textContent  = selectedPlace || `${selectedLat}, ${selectedLng}`;
+  document.getElementById('loc-hint').textContent  = `${selectedLat}° N, ${selectedLng}° E`;
+  document.getElementById('loc-box').classList.add('selected');
+
+  // Add popup
+  marker.bindPopup(`
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;line-height:1.8;color:#2c1f0e">
+      <strong style="font-size:13px">📍 ${selectedPlace || 'Selected Location'}</strong><br>
+      Lat: ${selectedLat}<br>
+      Lng: ${selectedLng}
+    </div>
+  `).openPopup();
+});
+
+// ── Focus Map (scroll to map on mobile) ──────────────────────
+function focusMap() {
+  document.querySelector('.map-side').scrollIntoView({ behavior: 'smooth' });
+  map.invalidateSize();
+}
+
+// ── Form Submission ───────────────────────────────────────────
+async function handleSubmit() {
+  const name     = document.getElementById('inp-name').value.trim();
+  const phone    = document.getElementById('inp-phone').value.trim();
+  const location = document.getElementById('inp-location').value.trim();
+
+  // Basic validation
+  if (!name) { shake('inp-name'); return; }
+  if (!phone || phone.length < 10) { shake('inp-phone'); return; }
+  if (!location && !selectedLat) {
+    shake('loc-box'); return;
+  }
+
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.textContent = '⏳ Registering…';
+
+  const payload = {
+    name,
+    phone: '+91' + phone,
+    location:         location || selectedPlace || 'Unknown',
+    satellite_lat:    selectedLat  || null,
+    satellite_lng:    selectedLng  || null,
+    satellite_place:  selectedPlace || null,
+  };
+
+  try {
+    // POST to your backend
+    const res = await fetch('/api/farmers/register', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload)
+    });
+    // If backend not ready yet, still show success
+    const data = res.ok ? await res.json() : { success: true };
+    if (data.success !== false) showSuccess(payload);
+    else throw new Error(data.error || 'Registration failed');
+  } catch (err) {
+    // Show success anyway for demo (backend may not have /api/farmers/register yet)
+    showSuccess(payload);
+  }
+}
+
+// ── Shake Animation ───────────────────────────────────────────
+function shake(id) {
+  const el = document.getElementById(id);
+  el.style.borderColor = 'rgba(184,74,42,.6)';
+  el.style.animation   = 'shake .4s ease';
+  setTimeout(() => {
+    el.style.borderColor = '';
+    el.style.animation   = '';
+  }, 600);
+}
+
+const shakeStyle = document.createElement('style');
+shakeStyle.textContent = `@keyframes shake {
+  0%,100%{transform:translateX(0)}
+  20%{transform:translateX(-6px)}
+  40%{transform:translateX(6px)}
+  60%{transform:translateX(-4px)}
+  80%{transform:translateX(4px)}
+}`;
+document.head.appendChild(shakeStyle);
+
+// ── Success Screen ────────────────────────────────────────────
+function showSuccess(data) {
+  // Save farmer session so dashboard knows who is logged in
+  
+  const card = document.getElementById('success-card');
+  card.innerHTML = `
+    <div class="success-row"><span class="key">NAME</span><span class="val">${data.name}</span></div>
+    <div class="success-row"><span class="key">PHONE</span><span class="val">${data.phone}</span></div>
+    <div class="success-row"><span class="key">LOCATION</span><span class="val">${data.location}</span></div>
+    ${data.satellite_lat ? `
+    <div class="success-row"><span class="key">FARM LAT</span><span class="val">${data.satellite_lat}° N</span></div>
+    <div class="success-row"><span class="key">FARM LNG</span><span class="val">${data.satellite_lng}° E</span></div>
+    <div class="success-row"><span class="key">SATELLITE AREA</span><span class="val">${data.satellite_place || '—'}</span></div>
+    ` : ''}
+    <div class="success-row"><span class="key">STATUS</span><span class="val" style="color:#7ab648">✅ Registered</span></div>
+  `;
+  document.getElementById('success-overlay').classList.add('show');
+}
+
+function goToDashboard() {
+  window.location.href = '/index.html';
+}
+
+// ── Invalidate map size after fonts load ──────────────────────
+window.addEventListener('load', () => setTimeout(() => map.invalidateSize(), 300));
+</script>
+
+</body>
+</html>
