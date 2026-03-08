@@ -2,6 +2,7 @@
 //  AgriSmart 2026 — Backend Server (Node.js + Express)
 //  Handles: Fields API, Alerts API, Sensors API, AI Proxy,
 //           Yield Prediction, Pest Detection, SMS (Twilio)
+//           Farmer Registration with Satellite Location
 // ============================================================
 
 // ─── STEP 1: Load required packages ─────────────────────────
@@ -18,7 +19,7 @@ const PORT = process.env.PORT || 3000;
 // ─── STEP 2: Middleware ──────────────────────────────────────
 app.use(cors());                      // allow frontend to call this backend
 app.use(express.json());              // parse JSON request bodies
-app.use(express.static('public'));    // serve your HTML/CSS/JS files from /public folder
+// Static files served AFTER routes
 
 
 // ─── STEP 3: Connect to MongoDB ──────────────────────────────
@@ -69,18 +70,30 @@ const SensorReadingSchema = new mongoose.Schema({
 
 // Yield Prediction Log Schema — saves each prediction run
 const YieldLogSchema = new mongoose.Schema({
-  field:   { type: String, default: 'Unknown' },
-  n:       Number, p: Number, k: Number,
-  ph:      Number, moisture: Number, temp: Number,
-  result:  Number,   // predicted yield in t/ha
-  savedAt: { type: Date, default: Date.now }
+  field:    { type: String, default: 'Unknown' },
+  n:        Number, p: Number, k: Number,
+  ph:       Number, moisture: Number, temp: Number,
+  result:   Number,   // predicted yield in t/ha
+  savedAt:  { type: Date, default: Date.now }
 });
 
-// Register models
+// Farmer Schema — stores registered farmer details + satellite location
+const FarmerSchema = new mongoose.Schema({
+  name:            { type: String, required: true },   // full name
+  phone:           { type: String, required: true },   // e.g. +919876543210
+  location:        { type: String, required: true },   // village / district typed
+  satellite_lat:   { type: Number, default: null },    // GPS lat from map click
+  satellite_lng:   { type: Number, default: null },    // GPS lng from map click
+  satellite_place: { type: String, default: null },    // reverse geocoded name
+  registeredAt:    { type: Date,   default: Date.now }
+});
+
+// Register all models
 const Field         = mongoose.model('Field',         FieldSchema);
 const Alert         = mongoose.model('Alert',         AlertSchema);
 const SensorReading = mongoose.model('SensorReading', SensorReadingSchema);
 const YieldLog      = mongoose.model('YieldLog',      YieldLogSchema);
+const Farmer        = mongoose.model('Farmer',        FarmerSchema);
 
 
 // ============================================================
@@ -209,7 +222,6 @@ app.get('/api/sensors/:sensorName/history', async (req, res) => {
 
 
 // ── 5D. YIELD PREDICTION ─────────────────────────────────────
-// Receives NPK + soil data, returns predicted yield, and logs it
 
 app.post('/api/predict/yield', async (req, res) => {
   try {
@@ -266,7 +278,6 @@ app.get('/api/predict/yield/history', async (req, res) => {
 
 
 // ── 5E. AI AGRONOMIST (Claude API Proxy) ─────────────────────
-// Keeps your API key SAFE on the backend (never exposed to browser)
 
 app.post('/api/ai/ask', async (req, res) => {
   try {
@@ -338,8 +349,79 @@ app.post('/api/sms/send', async (req, res) => {
 });
 
 
-// ── 5G. HEALTH CHECK ─────────────────────────────────────────
-// Visit http://localhost:3000/api/health to check if server is running
+// ── 5G. FARMER REGISTRATION ──────────────────────────────────
+
+// POST register a new farmer — called from login.html
+app.post('/api/farmers/register', async (req, res) => {
+  try {
+    const { name, phone, location, satellite_lat, satellite_lng, satellite_place } = req.body;
+
+    // Validate required fields
+    if (!name || !phone || !location) {
+      return res.status(400).json({
+        success: false,
+        error: 'Name, phone, and location are required.'
+      });
+    }
+
+    // Save farmer to MongoDB
+    const farmer = new Farmer({
+      name,
+      phone,
+      location,
+      satellite_lat:   satellite_lat   || null,
+      satellite_lng:   satellite_lng   || null,
+      satellite_place: satellite_place || null,
+    });
+
+    await farmer.save();
+
+    console.log(`✅ New farmer registered: ${name} — ${location}`);
+
+    res.status(201).json({
+      success: true,
+      message: 'Farmer registered successfully!',
+      data: farmer
+    });
+
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// GET all registered farmers
+app.get('/api/farmers', async (req, res) => {
+  try {
+    const farmers = await Farmer.find().sort({ registeredAt: -1 });
+    res.json({ success: true, count: farmers.length, data: farmers });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// GET single farmer by ID
+app.get('/api/farmers/:id', async (req, res) => {
+  try {
+    const farmer = await Farmer.findById(req.params.id);
+    if (!farmer) return res.status(404).json({ success: false, error: 'Farmer not found' });
+    res.json({ success: true, data: farmer });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+// DELETE a farmer
+app.delete('/api/farmers/:id', async (req, res) => {
+  try {
+    await Farmer.findByIdAndDelete(req.params.id);
+    res.json({ success: true, message: 'Farmer deleted' });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+
+// ── 5H. HEALTH CHECK ─────────────────────────────────────────
 
 app.get('/api/health', (req, res) => {
   res.json({
@@ -352,11 +434,14 @@ app.get('/api/health', (req, res) => {
 });
 
 
-// ── 5H. Catch-All — Serve Frontend ───────────────────────────
-// Any unknown route serves your index.html (for single-page app)
-app.get('*', (req, res) => {
+// ── 5I. ROUTING ─────────────────────────────────────────────
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'login.html'));
+});
+app.get('/dashboard', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 // ─── STEP 6: Start the Server ────────────────────────────────

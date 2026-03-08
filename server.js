@@ -19,6 +19,7 @@ const PORT = process.env.PORT || 3000;
 // ─── STEP 2: Middleware ──────────────────────────────────────
 app.use(cors());                      // allow frontend to call this backend
 app.use(express.json());              // parse JSON request bodies
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 
@@ -436,25 +437,17 @@ app.get('/api/health', (req, res) => {
 
 // ── 5I. ROUTING ──────────────────────────────────────────────
 // Routes
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'login.html'));
-});
+
 
 
 // ─── STEP 6: Start the Server ────────────────────────────────
-app.get("/dashboard",(req,res)=>res.sendFile(require("path").join(__dirname,"public","index.html")));
-app.get("/",(req,res)=>res.sendFile(require("path").join(__dirname,"public","login.html")));
-app.get("/dashboard",(req,res)=>res.sendFile(require("path").join(__dirname,"public","index.html")));
-app.use(require("express").static(require("path").join(__dirname,"public")));
-app.listen(PORT, () => {
-  console.log(`✅ AgriSmart backend running at http://localhost:${PORT}`);
-  console.log(`📡 API docs: http://localhost:${PORT}/api/health`);
 
-  // Keep Render free tier awake — ping every 14 minutes
-  setInterval(() => {
-    const http = require('http');
-    http.get(`http://localhost:${PORT}/api/health`, (r) => {
-      console.log('✅ Keep-alive ping:', r.statusCode);
-    }).on('error', () => {});
-  }, 14 * 60 * 1000);
+
+app.get('/', (req,res)=>res.sendFile(require('path').join(__dirname,'public','landing.html')));
+app.get('/register', (req,res)=>res.sendFile(require('path').join(__dirname,'public','register.html')));
+app.get('/login', (req,res)=>res.sendFile(require('path').join(__dirname,'public','login.html')));
+app.get('/dashboard', (req,res)=>res.sendFile(require('path').join(__dirname,'public','index.html')));
+
+app.listen(PORT, () => {
+  console.log('AgriSmart backend running at http://localhost:' + PORT);
 });

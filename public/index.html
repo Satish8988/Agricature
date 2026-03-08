@@ -6,6 +6,7 @@
   <title>AgriSmart 2026 — Precision Agriculture Platform</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="styles.css"/>
+
 </head>
 <body>
 
@@ -56,10 +57,11 @@
   ══════════════════════════════════════ -->
   <aside class="sidebar">
     <div class="side-head" id="side-head-ops">Operations</div>
+    <div class="nav-item" data-p="market" onclick="nav('market',this)"><span class="nav-ico">💹</span><span class="nav-label">Market Prices</span><span class="nav-badge">LIVE</span></div>
     <div class="nav-item active" data-p="overview" onclick="nav('overview',this)"><span class="nav-ico">🗺</span><span class="nav-label" id="nav-overview">Overview</span></div>
-    <div class="nav-item" data-p="market" onclick="nav('market',this)"><span class="nav-ico">💹</span><span class="nav-label">Market Prices</span><span class="nav-badge">LIVE</span></div>
-    <div class="nav-item" data-p="market" onclick="nav('market',this)"><span class="nav-ico">💹</span><span class="nav-label">Market Prices</span><span class="nav-badge">LIVE</span></div>
-    <div class="nav-item" data-p="market" onclick="nav('market',this)"><span class="nav-ico">💹</span><span class="nav-label">Market Prices</span><span class="nav-badge">LIVE</span></div>
+    
+    
+    
     <div class="nav-item" data-p="fields"   onclick="nav('fields',this)">  <span class="nav-ico">🌱</span><span class="nav-label" id="nav-fields">My Fields</span></div>
     <div class="nav-item" data-p="sensors"  onclick="nav('sensors',this)"> <span class="nav-ico">📡</span><span class="nav-label" id="nav-sensors">IoT Sensors</span></div>
 
@@ -320,10 +322,47 @@ model = joblib.<span class="c-fn">load</span>(<span class="c-str">"rf_yield.pkl"
     </div>
 
 
-    <div class="page" id="p-market">
-      <div class="page-hdr">
-        <div class="page-hdr-left"><h1>Market Prices</h1><p id="market-city-sub">Live mandi prices for your region</p></div>
-        <div class="page-hdr-right"><div class="chip chip-green">● Live</div><div class="chip chip-outline" id="market-date"></div></div>
+            <div class="page-hdr-right"><div class="chip chip-green">● Live</div><div class="chip chip-outline" id="market-date"></div></div>
+      </div>
+      <div id="market-city-banner" style="background:linear-gradient(135deg,rgba(46,104,40,.3),rgba(62,128,48,.15));border:1px solid var(--border-hi);border-radius:14px;padding:18px 22px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <div style="font-family:var(--font-h);font-size:20px;color:var(--cream)" id="market-city-name">Loading...</div>
+          <div style="font-family:var(--font-m);font-size:11px;color:var(--faint);margin-top:3px" id="market-city-info"></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap" id="market-city-stats"></div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px">
+        <button class="market-tab active" onclick="showCategory('all',this)">🌾 All</button>
+        <button class="market-tab" onclick="showCategory('vegetables',this)">🥬 Vegetables</button>
+        <button class="market-tab" onclick="showCategory('fruits',this)">🍎 Fruits</button>
+        <button class="market-tab" onclick="showCategory('grains',this)">🌾 Grains</button>
+        <button class="market-tab" onclick="showCategory('spices',this)">🌶 Spices</button>
+        <button class="market-tab" onclick="showCategory('cash',this)">🌿 Cash Crops</button>
+      </div>
+      <div id="market-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px"></div>
+    </div>
+
+            <div class="page-hdr-right"><div class="chip chip-green">● Live</div><div class="chip chip-outline" id="market-date"></div></div>
+      </div>
+      <div id="market-city-banner" style="background:linear-gradient(135deg,rgba(46,104,40,.3),rgba(62,128,48,.15));border:1px solid var(--border-hi);border-radius:14px;padding:18px 22px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <div style="font-family:var(--font-h);font-size:20px;color:var(--cream)" id="market-city-name">Loading...</div>
+          <div style="font-family:var(--font-m);font-size:11px;color:var(--faint);margin-top:3px" id="market-city-info"></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap" id="market-city-stats"></div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px">
+        <button class="market-tab active" onclick="showCategory('all',this)">🌾 All</button>
+        <button class="market-tab" onclick="showCategory('vegetables',this)">🥬 Vegetables</button>
+        <button class="market-tab" onclick="showCategory('fruits',this)">🍎 Fruits</button>
+        <button class="market-tab" onclick="showCategory('grains',this)">🌾 Grains</button>
+        <button class="market-tab" onclick="showCategory('spices',this)">🌶 Spices</button>
+        <button class="market-tab" onclick="showCategory('cash',this)">🌿 Cash Crops</button>
+      </div>
+      <div id="market-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px"></div>
+    </div>
+
+            <div class="page-hdr-right"><div class="chip chip-green">● Live</div><div class="chip chip-outline" id="market-date"></div></div>
       </div>
       <div id="market-city-banner" style="background:linear-gradient(135deg,rgba(46,104,40,.3),rgba(62,128,48,.15));border:1px solid var(--border-hi);border-radius:14px;padding:18px 22px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
         <div>
@@ -348,14 +387,14 @@ model = joblib.<span class="c-fn">load</span>(<span class="c-str">"rf_yield.pkl"
         <div class="page-hdr-left"><h1>Market Prices</h1><p id="market-city-sub">Live mandi prices for your region</p></div>
         <div class="page-hdr-right"><div class="chip chip-green">● Live</div><div class="chip chip-outline" id="market-date"></div></div>
       </div>
-      <div id="market-city-banner" style="background:linear-gradient(135deg,rgba(46,104,40,.3),rgba(62,128,48,.15));border:1px solid var(--border-hi);border-radius:14px;padding:18px 22px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+      <div id="market-city-banner" style="background:linear-gradient(135deg,rgba(46,104,40,.15),rgba(62,128,48,.08));border:1px solid #ddecd4;border-radius:14px;padding:16px 20px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
         <div>
-          <div style="font-family:var(--font-h);font-size:20px;color:var(--cream)" id="market-city-name">Loading...</div>
-          <div style="font-family:var(--font-m);font-size:11px;color:var(--faint);margin-top:3px" id="market-city-info"></div>
+          <div style="font-size:18px;font-weight:700;color:#1a2e1c" id="market-city-name">Loading...</div>
+          <div style="font-size:11px;color:#6b8f6e;margin-top:2px" id="market-city-info"></div>
         </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap" id="market-city-stats"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap" id="market-city-stats"></div>
       </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px">
         <button class="market-tab active" onclick="showCategory('all',this)">🌾 All</button>
         <button class="market-tab" onclick="showCategory('vegetables',this)">🥬 Vegetables</button>
         <button class="market-tab" onclick="showCategory('fruits',this)">🍎 Fruits</button>
@@ -363,30 +402,7 @@ model = joblib.<span class="c-fn">load</span>(<span class="c-str">"rf_yield.pkl"
         <button class="market-tab" onclick="showCategory('spices',this)">🌶 Spices</button>
         <button class="market-tab" onclick="showCategory('cash',this)">🌿 Cash Crops</button>
       </div>
-      <div id="market-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px"></div>
-    </div>
-
-    <div class="page" id="p-market">
-      <div class="page-hdr">
-        <div class="page-hdr-left"><h1>Market Prices</h1><p id="market-city-sub">Live mandi prices for your region</p></div>
-        <div class="page-hdr-right"><div class="chip chip-green">● Live</div><div class="chip chip-outline" id="market-date"></div></div>
-      </div>
-      <div id="market-city-banner" style="background:linear-gradient(135deg,rgba(46,104,40,.3),rgba(62,128,48,.15));border:1px solid var(--border-hi);border-radius:14px;padding:18px 22px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
-        <div>
-          <div style="font-family:var(--font-h);font-size:20px;color:var(--cream)" id="market-city-name">Loading...</div>
-          <div style="font-family:var(--font-m);font-size:11px;color:var(--faint);margin-top:3px" id="market-city-info"></div>
-        </div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap" id="market-city-stats"></div>
-      </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px">
-        <button class="market-tab active" onclick="showCategory('all',this)">🌾 All</button>
-        <button class="market-tab" onclick="showCategory('vegetables',this)">🥬 Vegetables</button>
-        <button class="market-tab" onclick="showCategory('fruits',this)">🍎 Fruits</button>
-        <button class="market-tab" onclick="showCategory('grains',this)">🌾 Grains</button>
-        <button class="market-tab" onclick="showCategory('spices',this)">🌶 Spices</button>
-        <button class="market-tab" onclick="showCategory('cash',this)">🌿 Cash Crops</button>
-      </div>
-      <div id="market-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px"></div>
+      <div id="market-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px"></div>
     </div>
   </main>
 </div>
@@ -408,15 +424,10 @@ model = joblib.<span class="c-fn">load</span>(<span class="c-str">"rf_yield.pkl"
   <button class="mob-nav-btn" data-p="advisor" onclick="nav('advisor',this);setMobActive(this)">
     <span>🤖</span><span>AI</span>
   </button>
-  <button class="mob-nav-btn" data-p="market" onclick="nav('market',this);setMobActive(this)">
-    <span>💹</span><span>Market</span>
-  </button>
-  <button class="mob-nav-btn" data-p="market" onclick="nav('market',this);setMobActive(this)">
-    <span>💹</span><span>Market</span>
-  </button>
-  <button class="mob-nav-btn" data-p="market" onclick="nav('market',this);setMobActive(this)">
-    <span>💹</span><span>Market</span>
-  </button>
+  
+  
+  
+  <button class="mob-nav-btn" data-p="market" onclick="nav('market',this);setMobActive(this)"><span>💹</span><span>Market</span></button>
   <button class="mob-nav-btn" data-p="alerts" onclick="nav('alerts',this);setMobActive(this)">
     <span>🚨</span><span>Alerts</span>
   </button>
