@@ -445,4 +445,12 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`✅ AgriSmart backend running at http://localhost:${PORT}`);
   console.log(`📡 API docs: http://localhost:${PORT}/api/health`);
+
+  // Keep Render free tier awake — ping every 14 minutes
+  setInterval(() => {
+    const http = require('http');
+    http.get(`http://localhost:${PORT}/api/health`, (r) => {
+      console.log('✅ Keep-alive ping:', r.statusCode);
+    }).on('error', () => {});
+  }, 14 * 60 * 1000);
 });
