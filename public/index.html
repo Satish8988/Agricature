@@ -57,6 +57,9 @@
   <aside class="sidebar">
     <div class="side-head" id="side-head-ops">Operations</div>
     <div class="nav-item active" data-p="overview" onclick="nav('overview',this)"><span class="nav-ico">🗺</span><span class="nav-label" id="nav-overview">Overview</span></div>
+    <div class="nav-item" data-p="market" onclick="nav('market',this)"><span class="nav-ico">💹</span><span class="nav-label">Market Prices</span><span class="nav-badge">LIVE</span></div>
+    <div class="nav-item" data-p="market" onclick="nav('market',this)"><span class="nav-ico">💹</span><span class="nav-label">Market Prices</span><span class="nav-badge">LIVE</span></div>
+    <div class="nav-item" data-p="market" onclick="nav('market',this)"><span class="nav-ico">💹</span><span class="nav-label">Market Prices</span><span class="nav-badge">LIVE</span></div>
     <div class="nav-item" data-p="fields"   onclick="nav('fields',this)">  <span class="nav-ico">🌱</span><span class="nav-label" id="nav-fields">My Fields</span></div>
     <div class="nav-item" data-p="sensors"  onclick="nav('sensors',this)"> <span class="nav-ico">📡</span><span class="nav-label" id="nav-sensors">IoT Sensors</span></div>
 
@@ -316,6 +319,75 @@ model = joblib.<span class="c-fn">load</span>(<span class="c-str">"rf_yield.pkl"
       </div>
     </div>
 
+
+    <div class="page" id="p-market">
+      <div class="page-hdr">
+        <div class="page-hdr-left"><h1>Market Prices</h1><p id="market-city-sub">Live mandi prices for your region</p></div>
+        <div class="page-hdr-right"><div class="chip chip-green">● Live</div><div class="chip chip-outline" id="market-date"></div></div>
+      </div>
+      <div id="market-city-banner" style="background:linear-gradient(135deg,rgba(46,104,40,.3),rgba(62,128,48,.15));border:1px solid var(--border-hi);border-radius:14px;padding:18px 22px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <div style="font-family:var(--font-h);font-size:20px;color:var(--cream)" id="market-city-name">Loading...</div>
+          <div style="font-family:var(--font-m);font-size:11px;color:var(--faint);margin-top:3px" id="market-city-info"></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap" id="market-city-stats"></div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px">
+        <button class="market-tab active" onclick="showCategory('all',this)">🌾 All</button>
+        <button class="market-tab" onclick="showCategory('vegetables',this)">🥬 Vegetables</button>
+        <button class="market-tab" onclick="showCategory('fruits',this)">🍎 Fruits</button>
+        <button class="market-tab" onclick="showCategory('grains',this)">🌾 Grains</button>
+        <button class="market-tab" onclick="showCategory('spices',this)">🌶 Spices</button>
+        <button class="market-tab" onclick="showCategory('cash',this)">🌿 Cash Crops</button>
+      </div>
+      <div id="market-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px"></div>
+    </div>
+
+    <div class="page" id="p-market">
+      <div class="page-hdr">
+        <div class="page-hdr-left"><h1>Market Prices</h1><p id="market-city-sub">Live mandi prices for your region</p></div>
+        <div class="page-hdr-right"><div class="chip chip-green">● Live</div><div class="chip chip-outline" id="market-date"></div></div>
+      </div>
+      <div id="market-city-banner" style="background:linear-gradient(135deg,rgba(46,104,40,.3),rgba(62,128,48,.15));border:1px solid var(--border-hi);border-radius:14px;padding:18px 22px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <div style="font-family:var(--font-h);font-size:20px;color:var(--cream)" id="market-city-name">Loading...</div>
+          <div style="font-family:var(--font-m);font-size:11px;color:var(--faint);margin-top:3px" id="market-city-info"></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap" id="market-city-stats"></div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px">
+        <button class="market-tab active" onclick="showCategory('all',this)">🌾 All</button>
+        <button class="market-tab" onclick="showCategory('vegetables',this)">🥬 Vegetables</button>
+        <button class="market-tab" onclick="showCategory('fruits',this)">🍎 Fruits</button>
+        <button class="market-tab" onclick="showCategory('grains',this)">🌾 Grains</button>
+        <button class="market-tab" onclick="showCategory('spices',this)">🌶 Spices</button>
+        <button class="market-tab" onclick="showCategory('cash',this)">🌿 Cash Crops</button>
+      </div>
+      <div id="market-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px"></div>
+    </div>
+
+    <div class="page" id="p-market">
+      <div class="page-hdr">
+        <div class="page-hdr-left"><h1>Market Prices</h1><p id="market-city-sub">Live mandi prices for your region</p></div>
+        <div class="page-hdr-right"><div class="chip chip-green">● Live</div><div class="chip chip-outline" id="market-date"></div></div>
+      </div>
+      <div id="market-city-banner" style="background:linear-gradient(135deg,rgba(46,104,40,.3),rgba(62,128,48,.15));border:1px solid var(--border-hi);border-radius:14px;padding:18px 22px;margin-bottom:22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+        <div>
+          <div style="font-family:var(--font-h);font-size:20px;color:var(--cream)" id="market-city-name">Loading...</div>
+          <div style="font-family:var(--font-m);font-size:11px;color:var(--faint);margin-top:3px" id="market-city-info"></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap" id="market-city-stats"></div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px">
+        <button class="market-tab active" onclick="showCategory('all',this)">🌾 All</button>
+        <button class="market-tab" onclick="showCategory('vegetables',this)">🥬 Vegetables</button>
+        <button class="market-tab" onclick="showCategory('fruits',this)">🍎 Fruits</button>
+        <button class="market-tab" onclick="showCategory('grains',this)">🌾 Grains</button>
+        <button class="market-tab" onclick="showCategory('spices',this)">🌶 Spices</button>
+        <button class="market-tab" onclick="showCategory('cash',this)">🌿 Cash Crops</button>
+      </div>
+      <div id="market-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px"></div>
+    </div>
   </main>
 </div>
 
@@ -335,6 +407,15 @@ model = joblib.<span class="c-fn">load</span>(<span class="c-str">"rf_yield.pkl"
   </button>
   <button class="mob-nav-btn" data-p="advisor" onclick="nav('advisor',this);setMobActive(this)">
     <span>🤖</span><span>AI</span>
+  </button>
+  <button class="mob-nav-btn" data-p="market" onclick="nav('market',this);setMobActive(this)">
+    <span>💹</span><span>Market</span>
+  </button>
+  <button class="mob-nav-btn" data-p="market" onclick="nav('market',this);setMobActive(this)">
+    <span>💹</span><span>Market</span>
+  </button>
+  <button class="mob-nav-btn" data-p="market" onclick="nav('market',this);setMobActive(this)">
+    <span>💹</span><span>Market</span>
   </button>
   <button class="mob-nav-btn" data-p="alerts" onclick="nav('alerts',this);setMobActive(this)">
     <span>🚨</span><span>Alerts</span>
@@ -365,5 +446,371 @@ function setMobActive(el) {
 }
 </script>
 
+
+<style>
+.market-tab{background:var(--bg-inset);border:1px solid var(--border);border-radius:99px;padding:6px 14px;font-family:var(--font-m);font-size:11px;color:var(--dim);cursor:pointer;transition:.15s}
+.market-tab:hover,.market-tab.active{background:rgba(120,208,72,.12);border-color:var(--lime);color:var(--lime);font-weight:600}
+.price-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:15px;transition:.2s;position:relative;overflow:hidden}
+.price-card:hover{border-color:var(--border-hi);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.price-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.pc-up::before{background:linear-gradient(90deg,transparent,var(--lime),transparent)}
+.pc-dn::before{background:linear-gradient(90deg,transparent,#b83828,transparent)}
+.pc-neu::before{background:linear-gradient(90deg,transparent,#c07010,transparent)}
+.pc-icon{font-size:26px;margin-bottom:7px}
+.pc-name{font-size:13px;font-weight:600;color:var(--cream);margin-bottom:1px}
+.pc-cat{font-family:var(--font-m);font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.1em;margin-bottom:9px}
+.pc-price{font-family:var(--font-h);font-size:22px;color:var(--cream)}
+.pc-unit{font-family:var(--font-m);font-size:10px;color:var(--faint)}
+.pc-trend{display:flex;align-items:center;gap:4px;margin-top:5px;font-family:var(--font-m);font-size:11px}
+.pc-range{font-family:var(--font-m);font-size:10px;color:var(--faint);margin-top:3px}
+.stat-chip{background:rgba(255,255,255,.05);border:1px solid var(--border-hi);border-radius:10px;padding:10px 16px;text-align:center}
+.stat-chip-val{font-family:var(--font-h);font-size:18px;color:var(--lime)}
+.stat-chip-lbl{font-family:var(--font-m);font-size:9px;color:var(--faint);text-transform:uppercase;margin-top:2px}
+</style>
+<script>
+const MP={
+  vegetables:[
+    {icon:'🍅',name:'Tomato',price:1200,min:800,max:1800,unit:'per quintal',trend:'+12%',dir:'up',cat:'vegetables'},
+    {icon:'🧅',name:'Onion',price:1800,min:1200,max:2400,unit:'per quintal',trend:'+8%',dir:'up',cat:'vegetables'},
+    {icon:'🥔',name:'Potato',price:900,min:600,max:1200,unit:'per quintal',trend:'-5%',dir:'dn',cat:'vegetables'},
+    {icon:'🥬',name:'Cabbage',price:600,min:400,max:900,unit:'per quintal',trend:'+3%',dir:'up',cat:'vegetables'},
+    {icon:'🌶',name:'Green Chilli',price:3200,min:2000,max:4500,unit:'per quintal',trend:'+18%',dir:'up',cat:'vegetables'},
+    {icon:'🍆',name:'Brinjal',price:650,min:400,max:900,unit:'per quintal',trend:'-3%',dir:'dn',cat:'vegetables'},
+    {icon:'🥕',name:'Carrot',price:1400,min:900,max:1900,unit:'per quintal',trend:'+6%',dir:'up',cat:'vegetables'},
+    {icon:'🧄',name:'Garlic',price:8000,min:5000,max:12000,unit:'per quintal',trend:'+22%',dir:'up',cat:'vegetables'},
+    {icon:'🥦',name:'Cauliflower',price:800,min:500,max:1100,unit:'per quintal',trend:'-2%',dir:'dn',cat:'vegetables'},
+    {icon:'🥒',name:'Cucumber',price:700,min:400,max:1000,unit:'per quintal',trend:'0%',dir:'neu',cat:'vegetables'}
+  ],
+  fruits:[
+    {icon:'🍌',name:'Banana',price:1500,min:1000,max:2200,unit:'per quintal',trend:'+7%',dir:'up',cat:'fruits'},
+    {icon:'🥭',name:'Mango',price:4500,min:3000,max:7000,unit:'per quintal',trend:'+15%',dir:'up',cat:'fruits'},
+    {icon:'🍊',name:'Orange',price:2800,min:1800,max:4000,unit:'per quintal',trend:'-4%',dir:'dn',cat:'fruits'},
+    {icon:'🍋',name:'Lemon',price:3500,min:2000,max:5000,unit:'per quintal',trend:'+10%',dir:'up',cat:'fruits'},
+    {icon:'🍇',name:'Grapes',price:5000,min:3500,max:7500,unit:'per quintal',trend:'+9%',dir:'up',cat:'fruits'},
+    {icon:'🍉',name:'Watermelon',price:800,min:500,max:1200,unit:'per quintal',trend:'-8%',dir:'dn',cat:'fruits'},
+    {icon:'🥥',name:'Coconut',price:120,min:80,max:180,unit:'per piece',trend:'+5%',dir:'up',cat:'fruits'},
+    {icon:'🍎',name:'Apple',price:6000,min:4000,max:9000,unit:'per quintal',trend:'+11%',dir:'up',cat:'fruits'},
+    {icon:'🍑',name:'Papaya',price:900,min:600,max:1400,unit:'per quintal',trend:'-2%',dir:'dn',cat:'fruits'},
+    {icon:'🍍',name:'Pineapple',price:2200,min:1500,max:3000,unit:'per quintal',trend:'+3%',dir:'up',cat:'fruits'}
+  ],
+  grains:[
+    {icon:'🌾',name:'Paddy (Rice)',price:2200,min:1900,max:2500,unit:'per quintal',trend:'+4%',dir:'up',cat:'grains'},
+    {icon:'🌾',name:'Wheat',price:2150,min:1900,max:2400,unit:'per quintal',trend:'+2%',dir:'up',cat:'grains'},
+    {icon:'🌽',name:'Maize',price:1800,min:1500,max:2100,unit:'per quintal',trend:'+6%',dir:'up',cat:'grains'},
+    {icon:'🫘',name:'Soybean',price:4200,min:3800,max:4800,unit:'per quintal',trend:'+3%',dir:'up',cat:'grains'},
+    {icon:'🥜',name:'Groundnut',price:5500,min:4800,max:6200,unit:'per quintal',trend:'+8%',dir:'up',cat:'grains'},
+    {icon:'🫘',name:'Toor Dal',price:7200,min:6000,max:8500,unit:'per quintal',trend:'+12%',dir:'up',cat:'grains'},
+    {icon:'🫘',name:'Chana Dal',price:5800,min:5000,max:6800,unit:'per quintal',trend:'+7%',dir:'up',cat:'grains'},
+    {icon:'🌾',name:'Bajra',price:2350,min:2000,max:2700,unit:'per quintal',trend:'+5%',dir:'up',cat:'grains'},
+    {icon:'🫘',name:'Moong Dal',price:8500,min:7000,max:10000,unit:'per quintal',trend:'+9%',dir:'up',cat:'grains'},
+    {icon:'🌾',name:'Jowar',price:2800,min:2400,max:3200,unit:'per quintal',trend:'+1%',dir:'up',cat:'grains'}
+  ],
+  spices:[
+    {icon:'🌶',name:'Red Chilli (Dry)',price:12000,min:8000,max:18000,unit:'per quintal',trend:'+25%',dir:'up',cat:'spices'},
+    {icon:'🟡',name:'Turmeric',price:7500,min:5500,max:10000,unit:'per quintal',trend:'+18%',dir:'up',cat:'spices'},
+    {icon:'🌿',name:'Coriander',price:4500,min:3000,max:6500,unit:'per quintal',trend:'+8%',dir:'up',cat:'spices'},
+    {icon:'🌱',name:'Cumin (Jeera)',price:18000,min:14000,max:24000,unit:'per quintal',trend:'+15%',dir:'up',cat:'spices'},
+    {icon:'🖤',name:'Black Pepper',price:45000,min:38000,max:55000,unit:'per quintal',trend:'+6%',dir:'up',cat:'spices'},
+    {icon:'🌿',name:'Ginger',price:3500,min:2500,max:5000,unit:'per quintal',trend:'-5%',dir:'dn',cat:'spices'},
+    {icon:'🧅',name:'Fenugreek',price:5500,min:4000,max:7500,unit:'per quintal',trend:'+11%',dir:'up',cat:'spices'},
+    {icon:'🟤',name:'Cardamom',price:120000,min:90000,max:160000,unit:'per quintal',trend:'+20%',dir:'up',cat:'spices'}
+  ],
+  cash:[
+    {icon:'🌿',name:'Cotton',price:6500,min:5800,max:7500,unit:'per quintal',trend:'+4%',dir:'up',cat:'cash'},
+    {icon:'🎋',name:'Sugarcane',price:350,min:310,max:390,unit:'per quintal',trend:'+2%',dir:'up',cat:'cash'},
+    {icon:'🍃',name:'Tobacco',price:18000,min:14000,max:24000,unit:'per quintal',trend:'+8%',dir:'up',cat:'cash'},
+    {icon:'☕',name:'Coffee',price:12000,min:9000,max:16000,unit:'per quintal',trend:'+14%',dir:'up',cat:'cash'},
+    {icon:'🌻',name:'Sunflower',price:5200,min:4500,max:6000,unit:'per quintal',trend:'+9%',dir:'up',cat:'cash'},
+    {icon:'🫒',name:'Castor',price:5800,min:5000,max:6800,unit:'per quintal',trend:'+7%',dir:'up',cat:'cash'},
+    {icon:'🍵',name:'Tea',price:22000,min:18000,max:28000,unit:'per quintal',trend:'+6%',dir:'up',cat:'cash'},
+    {icon:'🌿',name:'Jute',price:4500,min:3800,max:5500,unit:'per quintal',trend:'+3%',dir:'up',cat:'cash'}
+  ]
+};
+function initMarket(){
+  const s=sessionStorage.getItem('agri_farmer');
+  const f=s?JSON.parse(s):{};
+  const city=f.city||'Your City',state=f.state||'India',lands=f.city_lands||'N/A',market=f.city_market||'Local market';
+  document.getElementById('market-city-name').textContent='📍 '+city+', '+state;
+  document.getElementById('market-city-info').textContent=market+' · Updated: '+new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+  document.getElementById('market-date').textContent=new Date().toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
+  document.getElementById('market-city-sub').textContent='Live mandi prices for '+city+' region — updated daily';
+  const all=Object.values(MP).flat();
+  document.getElementById('market-city-stats').innerHTML=`
+    <div class="stat-chip"><div class="stat-chip-val">${lands}</div><div class="stat-chip-lbl">Farmland</div></div>
+    <div class="stat-chip"><div class="stat-chip-val">${all.length}</div><div class="stat-chip-lbl">Commodities</div></div>
+    <div class="stat-chip"><div class="stat-chip-val">${all.filter(p=>p.dir==='up').length}</div><div class="stat-chip-lbl">Price Up ↑</div></div>
+    <div class="stat-chip"><div class="stat-chip-val">${all.filter(p=>p.dir==='dn').length}</div><div class="stat-chip-lbl">Price Down ↓</div></div>`;
+  renderPrices('all');
+}
+function showCategory(cat,el){
+  document.querySelectorAll('.market-tab').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');renderPrices(cat);
+}
+function renderPrices(cat){
+  const items=cat==='all'?Object.values(MP).flat():MP[cat]||[];
+  const dc={'up':'var(--lime)','dn':'#b83828','neu':'#c07010'};
+  const da={'up':'↑','dn':'↓','neu':'→'};
+  document.getElementById('market-grid').innerHTML=items.map(i=>{
+    const p=Math.round(i.price*(1+(Math.random()*.06-.03)));
+    return `<div class="price-card pc-${i.dir}">
+      <div class="pc-icon">${i.icon}</div>
+      <div class="pc-name">${i.name}</div>
+      <div class="pc-cat">${i.cat}</div>
+      <div class="pc-price">₹${p.toLocaleString('en-IN')}</div>
+      <div class="pc-unit">${i.unit}</div>
+      <div class="pc-trend" style="color:${dc[i.dir]}">${da[i.dir]} ${i.trend} today</div>
+      <div class="pc-range">Range: ₹${i.min.toLocaleString('en-IN')} – ₹${i.max.toLocaleString('en-IN')}</div>
+    </div>`;
+  }).join('');
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  const orig=window.nav;
+  window.nav=function(page,el){if(typeof orig==='function')orig(page,el);if(page==='market')setTimeout(initMarket,100)};
+});
+</script>
+
+<style>
+.market-tab{background:var(--bg-inset);border:1px solid var(--border);border-radius:99px;padding:6px 14px;font-family:var(--font-m);font-size:11px;color:var(--dim);cursor:pointer;transition:.15s}
+.market-tab:hover,.market-tab.active{background:rgba(120,208,72,.12);border-color:var(--lime);color:var(--lime);font-weight:600}
+.price-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:15px;transition:.2s;position:relative;overflow:hidden}
+.price-card:hover{border-color:var(--border-hi);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.price-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.pc-up::before{background:linear-gradient(90deg,transparent,var(--lime),transparent)}
+.pc-dn::before{background:linear-gradient(90deg,transparent,#b83828,transparent)}
+.pc-neu::before{background:linear-gradient(90deg,transparent,#c07010,transparent)}
+.pc-icon{font-size:26px;margin-bottom:7px}
+.pc-name{font-size:13px;font-weight:600;color:var(--cream);margin-bottom:1px}
+.pc-cat{font-family:var(--font-m);font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.1em;margin-bottom:9px}
+.pc-price{font-family:var(--font-h);font-size:22px;color:var(--cream)}
+.pc-unit{font-family:var(--font-m);font-size:10px;color:var(--faint)}
+.pc-trend{display:flex;align-items:center;gap:4px;margin-top:5px;font-family:var(--font-m);font-size:11px}
+.pc-range{font-family:var(--font-m);font-size:10px;color:var(--faint);margin-top:3px}
+.stat-chip{background:rgba(255,255,255,.05);border:1px solid var(--border-hi);border-radius:10px;padding:10px 16px;text-align:center}
+.stat-chip-val{font-family:var(--font-h);font-size:18px;color:var(--lime)}
+.stat-chip-lbl{font-family:var(--font-m);font-size:9px;color:var(--faint);text-transform:uppercase;margin-top:2px}
+</style>
+<script>
+const MP={
+  vegetables:[
+    {icon:'🍅',name:'Tomato',price:1200,min:800,max:1800,unit:'per quintal',trend:'+12%',dir:'up',cat:'vegetables'},
+    {icon:'🧅',name:'Onion',price:1800,min:1200,max:2400,unit:'per quintal',trend:'+8%',dir:'up',cat:'vegetables'},
+    {icon:'🥔',name:'Potato',price:900,min:600,max:1200,unit:'per quintal',trend:'-5%',dir:'dn',cat:'vegetables'},
+    {icon:'🥬',name:'Cabbage',price:600,min:400,max:900,unit:'per quintal',trend:'+3%',dir:'up',cat:'vegetables'},
+    {icon:'🌶',name:'Green Chilli',price:3200,min:2000,max:4500,unit:'per quintal',trend:'+18%',dir:'up',cat:'vegetables'},
+    {icon:'🍆',name:'Brinjal',price:650,min:400,max:900,unit:'per quintal',trend:'-3%',dir:'dn',cat:'vegetables'},
+    {icon:'🥕',name:'Carrot',price:1400,min:900,max:1900,unit:'per quintal',trend:'+6%',dir:'up',cat:'vegetables'},
+    {icon:'🧄',name:'Garlic',price:8000,min:5000,max:12000,unit:'per quintal',trend:'+22%',dir:'up',cat:'vegetables'},
+    {icon:'🥦',name:'Cauliflower',price:800,min:500,max:1100,unit:'per quintal',trend:'-2%',dir:'dn',cat:'vegetables'},
+    {icon:'🥒',name:'Cucumber',price:700,min:400,max:1000,unit:'per quintal',trend:'0%',dir:'neu',cat:'vegetables'}
+  ],
+  fruits:[
+    {icon:'🍌',name:'Banana',price:1500,min:1000,max:2200,unit:'per quintal',trend:'+7%',dir:'up',cat:'fruits'},
+    {icon:'🥭',name:'Mango',price:4500,min:3000,max:7000,unit:'per quintal',trend:'+15%',dir:'up',cat:'fruits'},
+    {icon:'🍊',name:'Orange',price:2800,min:1800,max:4000,unit:'per quintal',trend:'-4%',dir:'dn',cat:'fruits'},
+    {icon:'🍋',name:'Lemon',price:3500,min:2000,max:5000,unit:'per quintal',trend:'+10%',dir:'up',cat:'fruits'},
+    {icon:'🍇',name:'Grapes',price:5000,min:3500,max:7500,unit:'per quintal',trend:'+9%',dir:'up',cat:'fruits'},
+    {icon:'🍉',name:'Watermelon',price:800,min:500,max:1200,unit:'per quintal',trend:'-8%',dir:'dn',cat:'fruits'},
+    {icon:'🥥',name:'Coconut',price:120,min:80,max:180,unit:'per piece',trend:'+5%',dir:'up',cat:'fruits'},
+    {icon:'🍎',name:'Apple',price:6000,min:4000,max:9000,unit:'per quintal',trend:'+11%',dir:'up',cat:'fruits'},
+    {icon:'🍑',name:'Papaya',price:900,min:600,max:1400,unit:'per quintal',trend:'-2%',dir:'dn',cat:'fruits'},
+    {icon:'🍍',name:'Pineapple',price:2200,min:1500,max:3000,unit:'per quintal',trend:'+3%',dir:'up',cat:'fruits'}
+  ],
+  grains:[
+    {icon:'🌾',name:'Paddy (Rice)',price:2200,min:1900,max:2500,unit:'per quintal',trend:'+4%',dir:'up',cat:'grains'},
+    {icon:'🌾',name:'Wheat',price:2150,min:1900,max:2400,unit:'per quintal',trend:'+2%',dir:'up',cat:'grains'},
+    {icon:'🌽',name:'Maize',price:1800,min:1500,max:2100,unit:'per quintal',trend:'+6%',dir:'up',cat:'grains'},
+    {icon:'🫘',name:'Soybean',price:4200,min:3800,max:4800,unit:'per quintal',trend:'+3%',dir:'up',cat:'grains'},
+    {icon:'🥜',name:'Groundnut',price:5500,min:4800,max:6200,unit:'per quintal',trend:'+8%',dir:'up',cat:'grains'},
+    {icon:'🫘',name:'Toor Dal',price:7200,min:6000,max:8500,unit:'per quintal',trend:'+12%',dir:'up',cat:'grains'},
+    {icon:'🫘',name:'Chana Dal',price:5800,min:5000,max:6800,unit:'per quintal',trend:'+7%',dir:'up',cat:'grains'},
+    {icon:'🌾',name:'Bajra',price:2350,min:2000,max:2700,unit:'per quintal',trend:'+5%',dir:'up',cat:'grains'},
+    {icon:'🫘',name:'Moong Dal',price:8500,min:7000,max:10000,unit:'per quintal',trend:'+9%',dir:'up',cat:'grains'},
+    {icon:'🌾',name:'Jowar',price:2800,min:2400,max:3200,unit:'per quintal',trend:'+1%',dir:'up',cat:'grains'}
+  ],
+  spices:[
+    {icon:'🌶',name:'Red Chilli (Dry)',price:12000,min:8000,max:18000,unit:'per quintal',trend:'+25%',dir:'up',cat:'spices'},
+    {icon:'🟡',name:'Turmeric',price:7500,min:5500,max:10000,unit:'per quintal',trend:'+18%',dir:'up',cat:'spices'},
+    {icon:'🌿',name:'Coriander',price:4500,min:3000,max:6500,unit:'per quintal',trend:'+8%',dir:'up',cat:'spices'},
+    {icon:'🌱',name:'Cumin (Jeera)',price:18000,min:14000,max:24000,unit:'per quintal',trend:'+15%',dir:'up',cat:'spices'},
+    {icon:'🖤',name:'Black Pepper',price:45000,min:38000,max:55000,unit:'per quintal',trend:'+6%',dir:'up',cat:'spices'},
+    {icon:'🌿',name:'Ginger',price:3500,min:2500,max:5000,unit:'per quintal',trend:'-5%',dir:'dn',cat:'spices'},
+    {icon:'🧅',name:'Fenugreek',price:5500,min:4000,max:7500,unit:'per quintal',trend:'+11%',dir:'up',cat:'spices'},
+    {icon:'🟤',name:'Cardamom',price:120000,min:90000,max:160000,unit:'per quintal',trend:'+20%',dir:'up',cat:'spices'}
+  ],
+  cash:[
+    {icon:'🌿',name:'Cotton',price:6500,min:5800,max:7500,unit:'per quintal',trend:'+4%',dir:'up',cat:'cash'},
+    {icon:'🎋',name:'Sugarcane',price:350,min:310,max:390,unit:'per quintal',trend:'+2%',dir:'up',cat:'cash'},
+    {icon:'🍃',name:'Tobacco',price:18000,min:14000,max:24000,unit:'per quintal',trend:'+8%',dir:'up',cat:'cash'},
+    {icon:'☕',name:'Coffee',price:12000,min:9000,max:16000,unit:'per quintal',trend:'+14%',dir:'up',cat:'cash'},
+    {icon:'🌻',name:'Sunflower',price:5200,min:4500,max:6000,unit:'per quintal',trend:'+9%',dir:'up',cat:'cash'},
+    {icon:'🫒',name:'Castor',price:5800,min:5000,max:6800,unit:'per quintal',trend:'+7%',dir:'up',cat:'cash'},
+    {icon:'🍵',name:'Tea',price:22000,min:18000,max:28000,unit:'per quintal',trend:'+6%',dir:'up',cat:'cash'},
+    {icon:'🌿',name:'Jute',price:4500,min:3800,max:5500,unit:'per quintal',trend:'+3%',dir:'up',cat:'cash'}
+  ]
+};
+function initMarket(){
+  const s=sessionStorage.getItem('agri_farmer');
+  const f=s?JSON.parse(s):{};
+  const city=f.city||'Your City',state=f.state||'India',lands=f.city_lands||'N/A',market=f.city_market||'Local market';
+  document.getElementById('market-city-name').textContent='📍 '+city+', '+state;
+  document.getElementById('market-city-info').textContent=market+' · Updated: '+new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+  document.getElementById('market-date').textContent=new Date().toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
+  document.getElementById('market-city-sub').textContent='Live mandi prices for '+city+' region — updated daily';
+  const all=Object.values(MP).flat();
+  document.getElementById('market-city-stats').innerHTML=`
+    <div class="stat-chip"><div class="stat-chip-val">${lands}</div><div class="stat-chip-lbl">Farmland</div></div>
+    <div class="stat-chip"><div class="stat-chip-val">${all.length}</div><div class="stat-chip-lbl">Commodities</div></div>
+    <div class="stat-chip"><div class="stat-chip-val">${all.filter(p=>p.dir==='up').length}</div><div class="stat-chip-lbl">Price Up ↑</div></div>
+    <div class="stat-chip"><div class="stat-chip-val">${all.filter(p=>p.dir==='dn').length}</div><div class="stat-chip-lbl">Price Down ↓</div></div>`;
+  renderPrices('all');
+}
+function showCategory(cat,el){
+  document.querySelectorAll('.market-tab').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');renderPrices(cat);
+}
+function renderPrices(cat){
+  const items=cat==='all'?Object.values(MP).flat():MP[cat]||[];
+  const dc={'up':'var(--lime)','dn':'#b83828','neu':'#c07010'};
+  const da={'up':'↑','dn':'↓','neu':'→'};
+  document.getElementById('market-grid').innerHTML=items.map(i=>{
+    const p=Math.round(i.price*(1+(Math.random()*.06-.03)));
+    return `<div class="price-card pc-${i.dir}">
+      <div class="pc-icon">${i.icon}</div>
+      <div class="pc-name">${i.name}</div>
+      <div class="pc-cat">${i.cat}</div>
+      <div class="pc-price">₹${p.toLocaleString('en-IN')}</div>
+      <div class="pc-unit">${i.unit}</div>
+      <div class="pc-trend" style="color:${dc[i.dir]}">${da[i.dir]} ${i.trend} today</div>
+      <div class="pc-range">Range: ₹${i.min.toLocaleString('en-IN')} – ₹${i.max.toLocaleString('en-IN')}</div>
+    </div>`;
+  }).join('');
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  const orig=window.nav;
+  window.nav=function(page,el){if(typeof orig==='function')orig(page,el);if(page==='market')setTimeout(initMarket,100)};
+});
+</script>
+
+<style>
+.market-tab{background:var(--bg-inset);border:1px solid var(--border);border-radius:99px;padding:6px 14px;font-family:var(--font-m);font-size:11px;color:var(--dim);cursor:pointer;transition:.15s}
+.market-tab:hover,.market-tab.active{background:rgba(120,208,72,.12);border-color:var(--lime);color:var(--lime);font-weight:600}
+.price-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:15px;transition:.2s;position:relative;overflow:hidden}
+.price-card:hover{border-color:var(--border-hi);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.price-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.pc-up::before{background:linear-gradient(90deg,transparent,var(--lime),transparent)}
+.pc-dn::before{background:linear-gradient(90deg,transparent,#b83828,transparent)}
+.pc-neu::before{background:linear-gradient(90deg,transparent,#c07010,transparent)}
+.pc-icon{font-size:26px;margin-bottom:7px}
+.pc-name{font-size:13px;font-weight:600;color:var(--cream);margin-bottom:1px}
+.pc-cat{font-family:var(--font-m);font-size:9px;color:var(--faint);text-transform:uppercase;letter-spacing:.1em;margin-bottom:9px}
+.pc-price{font-family:var(--font-h);font-size:22px;color:var(--cream)}
+.pc-unit{font-family:var(--font-m);font-size:10px;color:var(--faint)}
+.pc-trend{display:flex;align-items:center;gap:4px;margin-top:5px;font-family:var(--font-m);font-size:11px}
+.pc-range{font-family:var(--font-m);font-size:10px;color:var(--faint);margin-top:3px}
+.stat-chip{background:rgba(255,255,255,.05);border:1px solid var(--border-hi);border-radius:10px;padding:10px 16px;text-align:center}
+.stat-chip-val{font-family:var(--font-h);font-size:18px;color:var(--lime)}
+.stat-chip-lbl{font-family:var(--font-m);font-size:9px;color:var(--faint);text-transform:uppercase;margin-top:2px}
+</style>
+<script>
+const MP={
+  vegetables:[
+    {icon:'🍅',name:'Tomato',price:1200,min:800,max:1800,unit:'per quintal',trend:'+12%',dir:'up',cat:'vegetables'},
+    {icon:'🧅',name:'Onion',price:1800,min:1200,max:2400,unit:'per quintal',trend:'+8%',dir:'up',cat:'vegetables'},
+    {icon:'🥔',name:'Potato',price:900,min:600,max:1200,unit:'per quintal',trend:'-5%',dir:'dn',cat:'vegetables'},
+    {icon:'🥬',name:'Cabbage',price:600,min:400,max:900,unit:'per quintal',trend:'+3%',dir:'up',cat:'vegetables'},
+    {icon:'🌶',name:'Green Chilli',price:3200,min:2000,max:4500,unit:'per quintal',trend:'+18%',dir:'up',cat:'vegetables'},
+    {icon:'🍆',name:'Brinjal',price:650,min:400,max:900,unit:'per quintal',trend:'-3%',dir:'dn',cat:'vegetables'},
+    {icon:'🥕',name:'Carrot',price:1400,min:900,max:1900,unit:'per quintal',trend:'+6%',dir:'up',cat:'vegetables'},
+    {icon:'🧄',name:'Garlic',price:8000,min:5000,max:12000,unit:'per quintal',trend:'+22%',dir:'up',cat:'vegetables'},
+    {icon:'🥦',name:'Cauliflower',price:800,min:500,max:1100,unit:'per quintal',trend:'-2%',dir:'dn',cat:'vegetables'},
+    {icon:'🥒',name:'Cucumber',price:700,min:400,max:1000,unit:'per quintal',trend:'0%',dir:'neu',cat:'vegetables'}
+  ],
+  fruits:[
+    {icon:'🍌',name:'Banana',price:1500,min:1000,max:2200,unit:'per quintal',trend:'+7%',dir:'up',cat:'fruits'},
+    {icon:'🥭',name:'Mango',price:4500,min:3000,max:7000,unit:'per quintal',trend:'+15%',dir:'up',cat:'fruits'},
+    {icon:'🍊',name:'Orange',price:2800,min:1800,max:4000,unit:'per quintal',trend:'-4%',dir:'dn',cat:'fruits'},
+    {icon:'🍋',name:'Lemon',price:3500,min:2000,max:5000,unit:'per quintal',trend:'+10%',dir:'up',cat:'fruits'},
+    {icon:'🍇',name:'Grapes',price:5000,min:3500,max:7500,unit:'per quintal',trend:'+9%',dir:'up',cat:'fruits'},
+    {icon:'🍉',name:'Watermelon',price:800,min:500,max:1200,unit:'per quintal',trend:'-8%',dir:'dn',cat:'fruits'},
+    {icon:'🥥',name:'Coconut',price:120,min:80,max:180,unit:'per piece',trend:'+5%',dir:'up',cat:'fruits'},
+    {icon:'🍎',name:'Apple',price:6000,min:4000,max:9000,unit:'per quintal',trend:'+11%',dir:'up',cat:'fruits'},
+    {icon:'🍑',name:'Papaya',price:900,min:600,max:1400,unit:'per quintal',trend:'-2%',dir:'dn',cat:'fruits'},
+    {icon:'🍍',name:'Pineapple',price:2200,min:1500,max:3000,unit:'per quintal',trend:'+3%',dir:'up',cat:'fruits'}
+  ],
+  grains:[
+    {icon:'🌾',name:'Paddy (Rice)',price:2200,min:1900,max:2500,unit:'per quintal',trend:'+4%',dir:'up',cat:'grains'},
+    {icon:'🌾',name:'Wheat',price:2150,min:1900,max:2400,unit:'per quintal',trend:'+2%',dir:'up',cat:'grains'},
+    {icon:'🌽',name:'Maize',price:1800,min:1500,max:2100,unit:'per quintal',trend:'+6%',dir:'up',cat:'grains'},
+    {icon:'🫘',name:'Soybean',price:4200,min:3800,max:4800,unit:'per quintal',trend:'+3%',dir:'up',cat:'grains'},
+    {icon:'🥜',name:'Groundnut',price:5500,min:4800,max:6200,unit:'per quintal',trend:'+8%',dir:'up',cat:'grains'},
+    {icon:'🫘',name:'Toor Dal',price:7200,min:6000,max:8500,unit:'per quintal',trend:'+12%',dir:'up',cat:'grains'},
+    {icon:'🫘',name:'Chana Dal',price:5800,min:5000,max:6800,unit:'per quintal',trend:'+7%',dir:'up',cat:'grains'},
+    {icon:'🌾',name:'Bajra',price:2350,min:2000,max:2700,unit:'per quintal',trend:'+5%',dir:'up',cat:'grains'},
+    {icon:'🫘',name:'Moong Dal',price:8500,min:7000,max:10000,unit:'per quintal',trend:'+9%',dir:'up',cat:'grains'},
+    {icon:'🌾',name:'Jowar',price:2800,min:2400,max:3200,unit:'per quintal',trend:'+1%',dir:'up',cat:'grains'}
+  ],
+  spices:[
+    {icon:'🌶',name:'Red Chilli (Dry)',price:12000,min:8000,max:18000,unit:'per quintal',trend:'+25%',dir:'up',cat:'spices'},
+    {icon:'🟡',name:'Turmeric',price:7500,min:5500,max:10000,unit:'per quintal',trend:'+18%',dir:'up',cat:'spices'},
+    {icon:'🌿',name:'Coriander',price:4500,min:3000,max:6500,unit:'per quintal',trend:'+8%',dir:'up',cat:'spices'},
+    {icon:'🌱',name:'Cumin (Jeera)',price:18000,min:14000,max:24000,unit:'per quintal',trend:'+15%',dir:'up',cat:'spices'},
+    {icon:'🖤',name:'Black Pepper',price:45000,min:38000,max:55000,unit:'per quintal',trend:'+6%',dir:'up',cat:'spices'},
+    {icon:'🌿',name:'Ginger',price:3500,min:2500,max:5000,unit:'per quintal',trend:'-5%',dir:'dn',cat:'spices'},
+    {icon:'🧅',name:'Fenugreek',price:5500,min:4000,max:7500,unit:'per quintal',trend:'+11%',dir:'up',cat:'spices'},
+    {icon:'🟤',name:'Cardamom',price:120000,min:90000,max:160000,unit:'per quintal',trend:'+20%',dir:'up',cat:'spices'}
+  ],
+  cash:[
+    {icon:'🌿',name:'Cotton',price:6500,min:5800,max:7500,unit:'per quintal',trend:'+4%',dir:'up',cat:'cash'},
+    {icon:'🎋',name:'Sugarcane',price:350,min:310,max:390,unit:'per quintal',trend:'+2%',dir:'up',cat:'cash'},
+    {icon:'🍃',name:'Tobacco',price:18000,min:14000,max:24000,unit:'per quintal',trend:'+8%',dir:'up',cat:'cash'},
+    {icon:'☕',name:'Coffee',price:12000,min:9000,max:16000,unit:'per quintal',trend:'+14%',dir:'up',cat:'cash'},
+    {icon:'🌻',name:'Sunflower',price:5200,min:4500,max:6000,unit:'per quintal',trend:'+9%',dir:'up',cat:'cash'},
+    {icon:'🫒',name:'Castor',price:5800,min:5000,max:6800,unit:'per quintal',trend:'+7%',dir:'up',cat:'cash'},
+    {icon:'🍵',name:'Tea',price:22000,min:18000,max:28000,unit:'per quintal',trend:'+6%',dir:'up',cat:'cash'},
+    {icon:'🌿',name:'Jute',price:4500,min:3800,max:5500,unit:'per quintal',trend:'+3%',dir:'up',cat:'cash'}
+  ]
+};
+function initMarket(){
+  const s=sessionStorage.getItem('agri_farmer');
+  const f=s?JSON.parse(s):{};
+  const city=f.city||'Your City',state=f.state||'India',lands=f.city_lands||'N/A',market=f.city_market||'Local market';
+  document.getElementById('market-city-name').textContent='📍 '+city+', '+state;
+  document.getElementById('market-city-info').textContent=market+' · Updated: '+new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+  document.getElementById('market-date').textContent=new Date().toLocaleDateString('en-IN',{weekday:'short',day:'numeric',month:'short'});
+  document.getElementById('market-city-sub').textContent='Live mandi prices for '+city+' region — updated daily';
+  const all=Object.values(MP).flat();
+  document.getElementById('market-city-stats').innerHTML=`
+    <div class="stat-chip"><div class="stat-chip-val">${lands}</div><div class="stat-chip-lbl">Farmland</div></div>
+    <div class="stat-chip"><div class="stat-chip-val">${all.length}</div><div class="stat-chip-lbl">Commodities</div></div>
+    <div class="stat-chip"><div class="stat-chip-val">${all.filter(p=>p.dir==='up').length}</div><div class="stat-chip-lbl">Price Up ↑</div></div>
+    <div class="stat-chip"><div class="stat-chip-val">${all.filter(p=>p.dir==='dn').length}</div><div class="stat-chip-lbl">Price Down ↓</div></div>`;
+  renderPrices('all');
+}
+function showCategory(cat,el){
+  document.querySelectorAll('.market-tab').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');renderPrices(cat);
+}
+function renderPrices(cat){
+  const items=cat==='all'?Object.values(MP).flat():MP[cat]||[];
+  const dc={'up':'var(--lime)','dn':'#b83828','neu':'#c07010'};
+  const da={'up':'↑','dn':'↓','neu':'→'};
+  document.getElementById('market-grid').innerHTML=items.map(i=>{
+    const p=Math.round(i.price*(1+(Math.random()*.06-.03)));
+    return `<div class="price-card pc-${i.dir}">
+      <div class="pc-icon">${i.icon}</div>
+      <div class="pc-name">${i.name}</div>
+      <div class="pc-cat">${i.cat}</div>
+      <div class="pc-price">₹${p.toLocaleString('en-IN')}</div>
+      <div class="pc-unit">${i.unit}</div>
+      <div class="pc-trend" style="color:${dc[i.dir]}">${da[i.dir]} ${i.trend} today</div>
+      <div class="pc-range">Range: ₹${i.min.toLocaleString('en-IN')} – ₹${i.max.toLocaleString('en-IN')}</div>
+    </div>`;
+  }).join('');
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  const orig=window.nav;
+  window.nav=function(page,el){if(typeof orig==='function')orig(page,el);if(page==='market')setTimeout(initMarket,100)};
+});
+</script>
 </body>
 </html>
