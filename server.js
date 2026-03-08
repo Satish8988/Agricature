@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 3000;
 // ─── STEP 2: Middleware ──────────────────────────────────────
 app.use(cors());                      // allow frontend to call this backend
 app.use(express.json());              // parse JSON request bodies
-app.use(express.static(require('path').join(__dirname,'public'),{index:false}));    // serve your HTML/CSS/JS files from /public folder
+app.use("/assets",express.static(require('path').join(__dirname,'public'),));    // serve your HTML/CSS/JS files from /public folder
 
 
 // ─── STEP 3: Connect to MongoDB ──────────────────────────────
