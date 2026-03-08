@@ -19,7 +19,7 @@ const PORT = process.env.PORT || 3000;
 // ─── STEP 2: Middleware ──────────────────────────────────────
 app.use(cors());                      // allow frontend to call this backend
 app.use(express.json());              // parse JSON request bodies
-app.use("/assets",express.static(require('path').join(__dirname,'public'),));    // serve your HTML/CSS/JS files from /public folder
+
 
 
 // ─── STEP 3: Connect to MongoDB ──────────────────────────────
@@ -435,13 +435,17 @@ app.get('/api/health', (req, res) => {
 
 
 // ── 5I. ROUTING ──────────────────────────────────────────────
-// Simple: root opens login, everything else served as static file
+// Routes
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
 
 
 // ─── STEP 6: Start the Server ────────────────────────────────
+app.get("/dashboard",(req,res)=>res.sendFile(require("path").join(__dirname,"public","index.html")));
+app.get("/",(req,res)=>res.sendFile(require("path").join(__dirname,"public","login.html")));
+app.get("/dashboard",(req,res)=>res.sendFile(require("path").join(__dirname,"public","index.html")));
+app.use(require("express").static(require("path").join(__dirname,"public")));
 app.listen(PORT, () => {
   console.log(`✅ AgriSmart backend running at http://localhost:${PORT}`);
   console.log(`📡 API docs: http://localhost:${PORT}/api/health`);
