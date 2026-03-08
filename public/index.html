@@ -8,12 +8,9 @@
   <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
-
 <script>
-  // ── Session Guard ─────────────────────────────────────────
-  // If farmer has not logged in, send them back to login page
-  const farmer = sessionStorage.getItem('agri_farmer');
-  if (!farmer) {
+  // Session guard — redirect to login if not registered
+  if (!sessionStorage.getItem('agri_farmer')) {
     window.location.href = '/';
   }
 </script>
@@ -327,6 +324,28 @@ model = joblib.<span class="c-fn">load</span>(<span class="c-str">"rf_yield.pkl"
   </main>
 </div>
 
+
+<!-- ══════════════════════════════════════
+     MOBILE BOTTOM NAV
+══════════════════════════════════════ -->
+<nav class="mobile-nav">
+  <button class="mob-nav-btn active" data-p="overview" onclick="nav('overview',this);setMobActive(this)">
+    <span>🗺</span><span>Overview</span>
+  </button>
+  <button class="mob-nav-btn" data-p="fields" onclick="nav('fields',this);setMobActive(this)">
+    <span>🌱</span><span>Fields</span>
+  </button>
+  <button class="mob-nav-btn" data-p="yield" onclick="nav('yield',this);setMobActive(this)">
+    <span>📈</span><span>Yield</span>
+  </button>
+  <button class="mob-nav-btn" data-p="advisor" onclick="nav('advisor',this);setMobActive(this)">
+    <span>🤖</span><span>AI</span>
+  </button>
+  <button class="mob-nav-btn" data-p="alerts" onclick="nav('alerts',this);setMobActive(this)">
+    <span>🚨</span><span>Alerts</span>
+  </button>
+</nav>
+
 <!-- SMS MODAL -->
 <div class="modal-overlay" id="modal" onclick="closeModal(event)">
   <div class="modal-box">
@@ -342,6 +361,14 @@ model = joblib.<span class="c-fn">load</span>(<span class="c-str">"rf_yield.pkl"
 <script src="app.js"></script>
 <script src="renderers.js"></script>
 <script src="actions.js"></script>
+
+
+<script>
+function setMobActive(el) {
+  document.querySelectorAll('.mob-nav-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+</script>
 
 </body>
 </html>
