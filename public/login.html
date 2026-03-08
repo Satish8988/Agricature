@@ -680,7 +680,7 @@ document.head.appendChild(shakeStyle);
 // ── Success Screen ────────────────────────────────────────────
 function showSuccess(data) {
   // Save farmer session so dashboard knows who is logged in
-  sessionStorage.setItem('agri_farmer', JSON.stringify(data));
+  
   const card = document.getElementById('success-card');
   card.innerHTML = `
     <div class="success-row"><span class="key">NAME</span><span class="val">${data.name}</span></div>
@@ -697,7 +697,7 @@ function showSuccess(data) {
 }
 
 function goToDashboard() {
-  window.location.href = '/dashboard';
+  window.location.href = '/index.html';
 }
 
 // ── Invalidate map size after fonts load ──────────────────────

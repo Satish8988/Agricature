@@ -435,27 +435,9 @@ app.get('/api/health', (req, res) => {
 
 
 // ── 5I. ROUTING ──────────────────────────────────────────────
-
-// Root → login page
+// Simple: root opens login, everything else served as static file
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'login.html'));
-});
-
-// Dashboard
-app.get('/dashboard', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// Serve any static file that exists in /public directly
-// This prevents redirect loops for .js .css .html files
-app.get('*', (req, res) => {
-  const filePath = path.join(__dirname, 'public', req.path);
-  const fs = require('fs');
-  if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-    res.sendFile(filePath);
-  } else {
-    res.sendFile(path.join(__dirname, 'public', 'login.html'));
-  }
 });
 
 
